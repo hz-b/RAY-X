@@ -4,6 +4,8 @@ TEST(PlaneMirror, testSimpleParams) {
     // arrange
     // act
     // assert
+
+    // user parameters for test session
     double width = 68.12;
     double height = 123.6;
     double incidenceAngle = 13.2;
@@ -17,12 +19,14 @@ TEST(PlaneMirror, testSimpleParams) {
     std::vector<double> surface = {
         0, 0, 0, 0, double(icurv), 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0};
 
+    // world user parems to calculate position and orientation of object
     RAYX::WorldUserParams g_params = RAYX::WorldUserParams(
         degToRad(incidenceAngle), degToRad(incidenceAngle),
         degToRad(azimuthalAngle), dist, mis);
     glm::dvec4 position = g_params.calcPosition();
     glm::dmat4x4 orientation = g_params.calcOrientation();
 
+    // create mirror with specified parameters
     RAYX::PlaneMirror plM =
         RAYX::PlaneMirror("planemirror", geometricalShape, width, height,
                           g_params.getAzimuthalAngle(), position, orientation,

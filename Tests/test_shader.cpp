@@ -6,6 +6,8 @@
 #include "VulkanTracer.h"
 #include "setupTests.h"
 
+std::vector<RAYX::Ray> testValuesGlobal;
+
 std::vector<double> zeros = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 std::vector<double> zeros7 = {0, 0, 0, 0, 0, 0, 0};  // for slope error
 
@@ -104,6 +106,32 @@ void writeToFile(std::list<double> outputRays, std::string name) {
     if (print == 1) std::cout << ")" << std::endl;
     outputFile.close();
     std::cout << "done!" << std::endl;
+}
+
+/**
+ * encodes test values (max. 16 values) in a Ray because that is how they can be
+put to the shader
+ * @param testValues        vector of rays in which the test settings are stored
+ * @param pos               holds 3 doubles
+ * @param dir               holds 3 doubles
+ * @param stokes            holds 4 doubles
+ * @param energy            1 double
+ * @param weight            1 double
+ * @param pathLength        1 double
+ * @param order             1 double
+ * @param lastElement       1 double
+ * @param extraParam        1 double
+ */
+std::vector<RAYX::Ray> addTestSetting(
+    std::vector<RAYX::Ray> testValues, glm::dvec3 pos = glm::dvec3(0, 0, 0),
+    glm::dvec3 dir = glm::dvec3(0, 0, 0),
+    glm::dvec4 stokes = glm::dvec4(0, 0, 0, 0), double energy = 0,
+    double weight = 0, double pathLength = 0, double order = 0,
+    double lastElement = 0, double extraParam = 0) {
+    RAYX::Ray r = RAYX::Ray(pos, dir, stokes, energy, weight, pathLength, order,
+                            lastElement, extraParam);
+    testValues.push_back(r);
+    return testValues;
 }
 
 void compareFromCorrect(std::vector<RAYX::Ray> correct,
@@ -247,6 +275,15 @@ void compareFromFunction(fn<ret, par> func, std::vector<RAYX::Ray> testValues,
     }
 }
 
+/**
+ * runs given beamline on shader with deterministic matrix source (no randomness
+ * in rays) writes resulting rays to a csv file with the name "testFile_"+name
+ * of first element in beamline
+ * @param elements      vector of optical elements that form the beamline to
+ * test
+ * @param n             number of rays that should be used
+ *
+ */
 void testOpticalElement(
     std::vector<std::shared_ptr<RAYX::OpticalElement>> elements, int n) {
     RAYX::SimulationEnv::get().m_numOfRays = n;
@@ -255,8 +292,9 @@ void testOpticalElement(
         std::make_shared<RAYX::MatrixSource>("Matrix source 1", dist, 0.065,
                                              0.04, 0.0, 0.001, 0.001, 1, 0, 0,
                                              std::vector<double>{0, 0, 0, 0});
-
+    // run tracer with rays from source and elements from vector
     std::list<double> outputRays = runTracer(m->getRays(), elements);
+    // write to file "testFile_"+name of first element in beamlin
     std::string filename = "testFile_";
     std::cout << elements[0]->getName();
     filename.append(elements[0]->getName());
@@ -1559,27 +1597,28 @@ TEST(Tracer, iteratToTest) {
 
     // normal (always 0,1,0) encoded in ray position, a encoded in direction.x,
     // direction.y and direction.z are actual ray directions
-    RAYX::Ray r =
-        RAYX::Ray(glm::dvec3(-0.0175, 1736.4751598838836, -9848.1551798768887),
-                  glm::dvec3(-0.00026923073232438285, -0.17315574581145807,
-                             0.984894418304465),
-                  glm::dvec4(1, 1, 0, 0), 1.0, 100);
-    RAYX::Ray c =
-        RAYX::Ray(glm::dvec3(-2.7173752216893443, 0.050407875158271054,
-                             28.473736158432885),
-                  glm::dvec3(-0.00026923073232438285, -0.17315574581145807,
-                             0.984894418304465),
-                  glm::dvec4(1, 1, 0, 0), 1.0, 100);
-    testValues.push_back(r);
-    correct.push_back(c);
-
+    glm::dvec3 position =
+        glm::dvec3(-0.0175, 1736.4751598838836, -9848.1551798768887);
+    glm::dvec3 direction = glm::dvec3(-0.00026923073232438285,
+                                      -0.17315574581145807, 0.984894418304465);
+    double weight = 1.0;
     double longRadius = 10470.491787499999;
     double shortRadius = 315.72395939400002;
+    testValues =
+        addTestSetting(testValues, position, direction,
+                       glm::dvec4(longRadius, shortRadius, 0, 0), 0, weight);
+
+    glm::dvec3 expected_intersection = glm::dvec3(
+        -2.7173752216893443, 0.050407875158271054, 28.473736158432885);
+    glm::dvec3 expected_normal = glm::dvec3(
+        -0.00026923073232438285, -0.17315574581145807, 0.984894418304465);
+    correct = addTestSetting(correct, expected_intersection, expected_normal);
+
     std::shared_ptr<RAYX::OpticalElement> q =
         std::make_shared<RAYX::OpticalElement>(
             "TestPlaneRefrac",
-            std::vector<double>{longRadius, shortRadius, 0, 0, 0, 0, 0, 0, 0, 0,
-                                0, 0, 0, settings, 0, 0},
+            std::vector<double>{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, settings,
+                                0, 0},
             zeros, zeros, zeros, zeros);
 
     std::list<double> outputRays = runTracer(testValues, {q});
@@ -1595,22 +1634,19 @@ TEST(Tracer, getThetaTest) {
         GTEST_SKIP();
     }
 
+    // put here what you want as input for the shader
     std::vector<RAYX::Ray> testValues;
+    // put here what you expect to come back from the shader
     std::vector<RAYX::Ray> correct;
+    // defines the test on the shader
     double settings = 21;
 
-    RAYX::Ray r =
-        RAYX::Ray(glm::dvec3(0, 1, 0),
-                  glm::dvec3(-0.00049999997222222275, -0.17381228817387082,
-                             0.98477867487054738),
-                  glm::dvec4(1, 1, 0, 0), 1.0, 100);
-    RAYX::Ray c =
-        RAYX::Ray(glm::dvec3(0, 1, 0),
-                  glm::dvec3(-0.00049999997222222275, -0.17381228817387082,
-                             0.98477867487054738),
-                  glm::dvec4(1, 1, 0, 0), 1.0, 1.3960967569703167);
-    testValues.push_back(r);
-    correct.push_back(c);
+    glm::dvec3 normal = glm::dvec3(0, 1, 0);
+    glm::dvec3 direction = glm::dvec3(
+        -0.00049999997222222275, -0.17381228817387082, 0.98477867487054738);
+    testValues = addTestSetting(testValues, normal, direction);
+    double expected_theta = 1.3960967569703167;
+    correct = addTestSetting(correct, glm::dvec3(expected_theta, 0, 0));
 
     std::shared_ptr<RAYX::OpticalElement> q =
         std::make_shared<RAYX::OpticalElement>(
@@ -1638,14 +1674,14 @@ TEST(Tracer, reflectanceTest) {
 
     double energy = 100;
     double incidence_angle = 1.3962634006709251;
-    RAYX ::Ray r = RAYX::Ray(glm::dvec3(0, 0, 0), glm::dvec3(0, 0, 0),
-                             glm::dvec4(0, 0, 0, 0), energy, incidence_angle);
-    RAYX::Ray c =
-        RAYX::Ray(glm::dvec3(0.4385787674250865, 0.3522102644170379, 0),
-                  glm::dvec3(0.4312494615693625, 0.42810153127435358, 0),
-                  glm::dvec4(0, 0, 0, 0), 0, 0);
-    testValues.push_back(r);
-    correct.push_back(c);
+    testValues =
+        addTestSetting(testValues, glm::dvec3(0, 0, 0), glm::dvec3(0, 0, 0),
+                       glm::dvec4(0, 0, 0, 0), energy, incidence_angle);
+
+    glm::dvec2 exp_spol = glm::dvec2(0.4385787674250865, 0.3522102644170379);
+    glm::dvec2 exp_ppol = glm::dvec2(0.4312494615693625, 0.42810153127435358);
+    correct = addTestSetting(correct, glm::dvec3(exp_spol, 0),
+                             glm::dvec3(exp_ppol, 0));
 
     std::shared_ptr<RAYX::OpticalElement> q =
         std::make_shared<RAYX::OpticalElement>(
@@ -1655,9 +1691,6 @@ TEST(Tracer, reflectanceTest) {
             zeros, zeros, zeros, zeros);
 
     std::list<double> outputRays = runTracer(testValues, {q});
-    std::cout << "got " << outputRays.size() << " values from shader"
-              << std::endl;
-
     double tolerance = 1e-09;
     compareFromCorrect(correct, outputRays, tolerance);
 }
@@ -1671,63 +1704,49 @@ TEST(Tracer, snellTest) {
     std::vector<RAYX::Ray> correct;
     double settings = 23;
 
-    RAYX::Ray r = RAYX::Ray(
-        glm::dvec3(0.17364817766693041, 0,
-                   0),        // position.x,y = incidence angle
-        glm::dvec3(1, 0, 0),  // direction.x,y = refractive index
-                              // 1st material, cn1
-        glm::dvec4(0.91452118089946777, 0.035187568837614078, 0,
-                   0),  // stokes.x, y = refractive index 2nd material, cn2
-        0.0, 0.0);
-    RAYX::Ray c =
-        RAYX::Ray(glm::dvec3(0.1090636366167056, 0.4078927218856746,
-                             0),  // x,y = complex cosinus of resulting angle
-                  glm::dvec3(0, 0, 0), glm::dvec4(0, 0, 0, 0), 0, 0);
-    testValues.push_back(r);
-    correct.push_back(c);
+    // 1st test
+    glm::dvec2 incidenceCos = glm::dvec2(0.17364817766693041, 0);
+    glm::dvec2 refractiveIndex1 = glm::dvec2(1, 0);
+    glm::dvec2 refractiveIndex2 =
+        glm::dvec2(0.91452118089946777, 0.035187568837614078);
+    glm::dvec2 expected = glm::dvec2(0.1090636366167056, 0.4078927218856746);
+    testValues = addTestSetting(testValues, glm::dvec3(incidenceCos, 0),
+                                glm::dvec3(refractiveIndex1, 0),
+                                glm::dvec4(refractiveIndex2, 0, 0));
+    correct = addTestSetting(correct, glm::dvec3(expected, 0));
 
-    r = RAYX::Ray(glm::dvec3(0.17315572500228882, 0,
-                             0),        // position.x,y = incidence angle
-                  glm::dvec3(1, 0, 0),  // direction.x,y = refractive index
-                                        // 1st material, cn1
-                  glm::dvec4(0.91453807092958361, 0.035170965000031584, 0,
-                             0),  // stokes.x, y = refractive
-                                  // index 2nd material, cn2
-                  0.0, 0.0);
-    c = RAYX::Ray(glm::dvec3(0.10897754475504851, 0.40807275584607544,
-                             0),  // x,y = complex cosinus of resulting angle
-                  glm::dvec3(0, 0, 0), glm::dvec4(0, 0, 0, 0), 0, 0);
-    testValues.push_back(r);
-    correct.push_back(c);
+    // 2nd test
+    incidenceCos = glm::dvec2(0.17315572500228882, 0);
+    refractiveIndex1 = glm::dvec2(1, 0);
+    refractiveIndex2 = glm::dvec2(0.91453807092958361, 0.035170965000031584);
+    expected = glm::dvec2(0.10897754475504851, 0.40807275584607544);
+    // add test setting (input and expected)
+    testValues = addTestSetting(testValues, glm::dvec3(incidenceCos, 0),
+                                glm::dvec3(refractiveIndex1, 0),
+                                glm::dvec4(refractiveIndex2, 0, 0));
+    correct = addTestSetting(correct, glm::dvec3(expected, 0));
 
-    r = RAYX::Ray(glm::dvec3(0.1736481785774231, 0,
-                             0),        // position.x,y = incidence angle
-                  glm::dvec3(1, 0, 0),  // direction.x,y = refractive index
-                                        // 1st material, cn1
-                  glm::dvec4(0.9668422, 6.5589860E-02, 0,
-                             0),  // stokes.x, y = refractive
-                                  // index 2nd material, cn2
-                  0.0, 0.0);
-    c = RAYX::Ray(glm::dvec3(0.24302165191294139, 0.28697207607552583,
-                             0),  // x,y = complex cosinus of resulting angle
-                  glm::dvec3(0, 0, 0), glm::dvec4(0, 0, 0, 0), 0, 0);
-    testValues.push_back(r);
-    correct.push_back(c);
+    // 3rd test
+    incidenceCos = glm::dvec2(0.1736481785774231, 0);
+    refractiveIndex1 = glm::dvec2(1, 0);
+    refractiveIndex2 = glm::dvec2(0.9668422, 6.5589860E-02);
+    expected = glm::dvec2(0.24302165191294139, 0.28697207607552583);
+    // add test setting (input and expected)
+    testValues = addTestSetting(testValues, glm::dvec3(incidenceCos, 0),
+                                glm::dvec3(refractiveIndex1, 0),
+                                glm::dvec4(refractiveIndex2, 0, 0));
+    correct = addTestSetting(correct, glm::dvec3(expected, 0));
 
-    r = RAYX::Ray(
-        glm::dvec3(0.16307067260397731, 0.0027314608130525712,
-                   0),  // position.x,y = incidence angle
-        glm::dvec3(0.99816471240025439, 0.00045674598468145697,
-                   0),  // direction.x,y = refractive index
-                        // 1st material, cn1
-        glm::dvec4(0.99514154037883318, 0.0047593281563246184, 0,
-                   0),  // stokes.x, y = refractive index 2nd material, cn2
-        0.0, 0.0);
-    c = RAYX::Ray(glm::dvec3(0.14743465849863294, 0.031766878855366755,
-                             0),  // x,y = complex cosinus of resulting angle
-                  glm::dvec3(0, 0, 0), glm::dvec4(0, 0, 0, 0), 0, 0);
-    testValues.push_back(r);
-    correct.push_back(c);
+    // 4th test
+    incidenceCos = glm::dvec2(0.16307067260397731, 0.0027314608130525712);
+    refractiveIndex1 = glm::dvec2(0.99816471240025439, 0.00045674598468145697);
+    refractiveIndex2 = glm::dvec2(0.99514154037883318, 0.0047593281563246184);
+    expected = glm::dvec2(0.14743465849863294, 0.031766878855366755);
+    // add test setting (input and expected)
+    testValues = addTestSetting(testValues, glm::dvec3(incidenceCos, 0),
+                                glm::dvec3(refractiveIndex1, 0),
+                                glm::dvec4(refractiveIndex2, 0, 0));
+    correct = addTestSetting(correct, glm::dvec3(expected, 0));
 
     std::shared_ptr<RAYX::OpticalElement> q =
         std::make_shared<RAYX::OpticalElement>(
@@ -1753,57 +1772,31 @@ TEST(Tracer, fresnelTest) {
     std::vector<RAYX::Ray> correct;
     double settings = 24;
 
-    double cn1x = 0.91452118089946777;
-    double cn1y = 0.035187568837614078;
-    double cn2x = 1;
-    double cn2y = 0;
-    double cosa1x = 0.10906363669865969;
-    double cosa1y = 0.40789272144618016;
-    double cosa2x = 0.1736481785774231;
-    double cosa2y = 0;
+    // 1st test
+    glm::dvec2 cn1 = glm::dvec2(0.91453807092958361, 0.035170965000031584);
+    glm::dvec2 cn2 = glm::dvec2(1, 0);
+    glm::dvec2 cosa1 = glm::dvec2(0.10897754475504851, 0.40807275584607544);
+    glm::dvec2 cosa2 = glm::dvec2(0.17315572500228882, 0);
 
-    RAYX::Ray r =
-        RAYX::Ray(glm::dvec3(cosa1x, cosa1y,
-                             0),  // position.x,y = incidence angle // cosa1
-                  glm::dvec3(cosa2x, cosa2y, 0),  // direction.x,y = refractive
-                                                  // index 1st material
-                  glm::dvec4(cn1x, cn1y, cn2x,
-                             cn2y),  // stokes.x, y = refractive index 1st
-                                     // material, z,w = refractive index
-                                     // 2nd material
-                  0.0, 0.0);
-    RAYX::Ray c = RAYX::Ray(glm::dvec3(0.56981824812215442, 0.62585833416785819,
-                                       0),  // x,y = s polarization
-                            glm::dvec3(0.62929764490596996, 0.52731592442193231,
-                                       0),  // x,y p polarization
-                            glm::dvec4(0, 0, 0, 0), 0, 0);
-    testValues.push_back(r);
-    correct.push_back(c);
+    glm::dvec2 exp_spol = glm::dvec2(0.57163467986230043, 0.62486367906829532);
+    glm::dvec2 exp_ppol = glm::dvec2(0.63080662811278621, 0.52640331936127871);
+    testValues = addTestSetting(testValues, glm::dvec3(cosa1, 0),
+                                glm::dvec3(cosa2, 0), glm::dvec4(cn1, cn2));
+    correct = addTestSetting(correct, glm::dvec3(exp_spol, 0),
+                             glm::dvec3(exp_ppol, 0));
 
-    cn1x = 0.91453807092958361;
-    cn1y = 0.035170965000031584;
-    cn2x = 1;
-    cn2y = 0;
-    cosa1x = 0.10897754475504851;
-    cosa1y = 0.40807275584607544;
-    cosa2x = 0.17315572500228882;
-    cosa2y = 0;
-    r = RAYX::Ray(glm::dvec3(cosa1x, cosa1y,
-                             0),  // position.x,y = incidence angle // cosa1
-                  glm::dvec3(cosa2x, cosa2y, 0),  // direction.x,y = refractive
-                                                  // index 1st material
-                  glm::dvec4(cn1x, cn1y, cn2x,
-                             cn2y),  // stokes.x, y = refractive index 1st
-                                     // material, z,w = refractive index
-                                     // 2nd material
-                  0.0, 0.0);
-    c = RAYX::Ray(glm::dvec3(0.57163467986230043, 0.62486367906829532,
-                             0),  // x,y = s polarization
-                  glm::dvec3(0.63080662811278621, 0.52640331936127871,
-                             0),  // x,y p polarization
-                  glm::dvec4(0, 0, 0, 0), 0, 0);
-    testValues.push_back(r);
-    correct.push_back(c);
+    // 2nd test
+    cn1 = glm::dvec2(0.91452118089946777, 0.035187568837614078);
+    cn2 = glm::dvec2(1, 0);
+    cosa1 = glm::dvec2(0.10906363669865969, 0.40789272144618016);
+    cosa2 = glm::dvec2(0.1736481785774231, 0);
+    exp_spol = glm::dvec2(0.56981824812215442, 0.62585833416785819);
+    exp_ppol = glm::dvec2(0.62929764490596996, 0.52731592442193231);
+
+    testValues = addTestSetting(testValues, glm::dvec3(cosa1, 0),
+                                glm::dvec3(cosa2, 0), glm::dvec4(cn1, cn2));
+    correct = addTestSetting(correct, glm::dvec3(exp_spol, 0),
+                             glm::dvec3(exp_ppol, 0));
 
     std::shared_ptr<RAYX::OpticalElement> q =
         std::make_shared<RAYX::OpticalElement>(
@@ -1813,9 +1806,6 @@ TEST(Tracer, fresnelTest) {
             zeros, zeros, zeros, zeros);
 
     std::list<double> outputRays = runTracer(testValues, {q});
-    std::cout << "got " << outputRays.size() << " values from shader"
-              << std::endl;
-
     double tolerance = 1e-15;
     compareFromCorrect(correct, outputRays, tolerance);
 }
@@ -1829,31 +1819,20 @@ TEST(Tracer, amplitudeTest) {
     std::vector<RAYX::Ray> correct;
     double settings = 25;
 
-    double complex_x1 = 0.63080662811278621;
-    double complex_y1 = 0.52640331936127871;
-    double complex_x2 = 0.57163467986230043;
-    double complex_y2 = 0.62486367906829532;
-    double complex_x3 = 1;
-    double complex_y3 = 0;
-    double complex_x4 = 0;
-    double complex_y4 = 1;
+    glm::dvec2 complex_1 = glm::dvec2(0.63080662811278621, 0.52640331936127871);
+    glm::dvec2 complex_2 = glm::dvec2(0.57163467986230043, 0.62486367906829532);
+    glm::dvec2 complex_3 = glm::dvec2(1, 0);
+    glm::dvec2 complex_4 = glm::dvec2(0, 1);
 
-    RAYX::Ray r = RAYX::Ray(
-        glm::dvec3(complex_x1, complex_y1,
-                   0),  // position.x,y = complex number in x + y*i
-        glm::dvec3(complex_x2, complex_y2,
-                   0),  // direction.x,y = complex number in x + y*i
-        glm::dvec4(complex_x3, complex_y3, complex_x4, complex_y4), 0.0, 0.0);
-    RAYX::Ray c = RAYX::Ray(
-        glm::dvec3(
-            0.67501745670559532,
-            0.69542190922049119,  // position.x,y = r,phi in r * e^(phi*i)
-            0),
-        glm::dvec3(0.71722082464004022, 0.82985616444880206,
-                   0),  // direction.x,y = r,phi in r + e^(phi*i)
-        glm::dvec4(1, 0, 1, PI / 2), 0, 0);
-    testValues.push_back(r);
-    correct.push_back(c);
+    glm::dvec2 exp_1 = glm::dvec2(0.67501745670559532, 0.69542190922049119);
+    glm::dvec2 exp_2 = glm::dvec2(0.71722082464004022, 0.82985616444880206);
+    glm::dvec2 exp_3 = glm::dvec2(1, 0);
+    glm::dvec2 exp_4 = glm::dvec2(1, PI / 2);
+    testValues = addTestSetting(testValues, glm::dvec3(complex_1, 0),
+                                glm::dvec3(complex_2, 0),
+                                glm::dvec4(complex_3, complex_4));
+    correct = addTestSetting(correct, glm::dvec3(exp_1, 0),
+                             glm::dvec3(exp_2, 0), glm::dvec4(exp_3, exp_4));
 
     std::shared_ptr<RAYX::OpticalElement> q =
         std::make_shared<RAYX::OpticalElement>(

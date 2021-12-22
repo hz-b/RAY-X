@@ -2028,13 +2028,13 @@ void reflectance(double energy, double incidence_angle, inout dvec2 complex_S, i
  * euler = r * e^(i * phi) where r = sqrt(a**2 + b**2) = radius and phi = atan2(a,b) = (absolute) phase
  */
 dvec2 cartesian_to_euler(dvec2 complex) {
-	double r = complex.x*complex.x + complex.y*complex.y; // r = sqrt(a**2 + b**"), why not take sqrt in fortran code?
+	double r = dot(complex, complex); // r = sqrt(a**2 + b**"), why not take sqrt in fortran code?, maybe better bc square root looses precision
 	dvec2 euler;
 	if(r < 0 || r > 1) {
-		euler = dvec2(1.0/0.0, 1.0/0.0);
+		euler = dvec2(400,100);//dvec2(1.0/0.0, 1.0/0.0);
 		return euler;
 	}
-	euler = dvec2(r, r8_atan2(complex.y, complex.x)); // TODO in grad or in rad?
+	euler = dvec2(r, r8_atan2(complex.y, complex.x)); // in rad?
 	return euler;
 }
 
@@ -2067,8 +2067,8 @@ void efficiency(Ray r, out double real_S, out double real_P, out double delta, d
 	dvec2 euler_S = cartesian_to_euler(complex_S);
 
 	delta = phase_difference(euler_P, euler_S);
-	real_S = euler_S.x;
-	real_P = euler_P.x;
+	real_S = complex_P.x;//euler_S.x;
+	real_P = complex_P.y; //euler_P.x;
 }
 
 /** creates a Müller matrix (see p. 32 of Schäfers, 2007)
@@ -2880,7 +2880,6 @@ Ray traceMirror(Ray r, const int elementIndex, inout uint64_t ctr, dvec4 interse
 	
 	// calculate intersection point and normal at intersection point
 	dvec4 normal = setIntersectionPoint(r, mrr.surfaceParams, intersection);
-	double incidence_angle = getIncidenceAngle(r, normal); // getTheta
 	double azimuthal_angle = mrr.objectParameters[2][2]; // chi (azimuthalangle) in rad
 
 	// check if ray hit the element within the boundaries
@@ -2907,9 +2906,13 @@ Ray traceMirror(Ray r, const int elementIndex, inout uint64_t ctr, dvec4 interse
 	// calculate the new direction after the reflection
 	r.direction = dvec3(reflect(dvec4(r.direction,0), normal));
 	
-	double real_S, real_P, delta;
+	double real_S;
+	double real_P;
+	double delta;
+	double incidence_angle = getIncidenceAngle(r, normal); // getTheta
 	efficiency(r, real_S, real_P, delta, incidence_angle);
 	r.stokes = dvec4(real_S, real_P, delta, incidence_angle);
+	//r.stokes = dvec4(complex_S, complex_P);
 	//update_stokes(r, real_S, real_P, delta, azimuthal_angle); 
 	
 	r.order = 0;
@@ -3345,11 +3348,14 @@ void testFunctions() {
 		rayData[uint(gl_GlobalInvocationID)] = res;
 	}
 	else if(settings == 20) { // test iteratTo (method for finding intersection and normal for non-quadric surfaces like the torus)
-		dvec4 normal = iteratTo(r, quadricData[0].surfaceParams[0][0], quadricData[0].surfaceParams[0][1]);
-		rayData[uint(gl_GlobalInvocationID)] = r;
+		double longRadius = r.stokes.x;
+		double shortRadius = r.stokes.y;
+		dvec4 normal = iteratTo(r, longRadius, shortRadius);
+		res.position = r.position;
+		res.direction = r.direction; // normal?
+		rayData[uint(gl_GlobalInvocationID)] = res;
 	}else if(settings == 21) { // test getIncidenceAngle function that is needed for the efficiency calculations
-		Ray res;
-		res.weight = getIncidenceAngle(r, dvec4(r.position,0));
+		res.position.x = getIncidenceAngle(r, dvec4(r.position,0));
 		rayData[uint(gl_GlobalInvocationID)] = res;
 	}else if(settings == 22) { // test reflectance function that calculates the s and p polarization
 		double energy = r.energy;

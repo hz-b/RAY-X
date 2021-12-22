@@ -43,7 +43,7 @@ void Application::loadDummyBeamline() {  // ! objects are created here
     // 0, 0, 0 }, nullptr, GLOBAL);
 
     // plane mirror with misalignment
-    RAYX::GeometricUserParams pm_params = RAYX::GeometricUserParams(7);
+    RAYX::GeometricUserParams pm_params = RAYX::GeometricUserParams(10);
     RAYX::WorldUserParams w_coord = RAYX::WorldUserParams(
         pm_params.getAlpha(), pm_params.getBeta(), 0, 10000,
         std::vector<double>{1, 2, 3, 0.004, 0.005, 0.006});
