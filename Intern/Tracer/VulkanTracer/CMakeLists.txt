@@ -51,6 +51,8 @@ add_library(${PROJECT_NAME}
         src/RayList.cpp
         src/PalikTable.h
         src/PalikTable.cpp
+        src/Material.h
+        src/Material.cpp
         src/VulkanTracer.cpp
         src/VulkanTracer.h
 )

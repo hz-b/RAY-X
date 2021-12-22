@@ -3,6 +3,8 @@
 #include <chrono>
 #include <cmath>
 
+#include "Material.h"
+
 #ifdef RAYX_PLATFORM_WINDOWS
 #include "GFSDK_Aftermath.h"
 #endif
@@ -37,9 +39,9 @@
 #endif
 
 VulkanTracer::VulkanTracer() {
-    bufferSizes.resize(6);
-    buffers.resize(6);
-    bufferMemories.resize(6);
+    bufferSizes.resize(7);
+    buffers.resize(7);
+    bufferMemories.resize(7);
     // beamline.resize(0);
 }
 
@@ -101,9 +103,8 @@ void VulkanTracer::run() {
                  (uint64_t)numberOfRays * VULKANTRACER_RAY_DOUBLE_AMOUNT *
                      sizeof(double));  // maximum of 128MB
     bufferSizes[4] = (uint64_t)numberOfRays * 4 * sizeof(double);
-    bufferSizes[5] =
-        324 * 4 *
-        sizeof(double);  // TODO(Rudi): temporary! this only works for CU!
+    bufferSizes[5] = getMaterialIndexTable()->size() * sizeof(double);
+    bufferSizes[6] = getMaterialTable()->size() * sizeof(double);
     for (uint32_t i = 0; i < bufferSizes.size(); i++) {
         std::cout << "[VK]: Buffer [" << i << "] of size : " << bufferSizes[i]
                   << " Bytes" << std::endl;
@@ -500,11 +501,16 @@ void VulkanTracer::createBuffers() {
     createBuffer(bufferSizes[4], VK_BUFFER_USAGE_STORAGE_BUFFER_BIT,
                  VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, buffers[4],
                  bufferMemories[4]);
-    // buffer for material
+    // buffer for material index table
     createBuffer(bufferSizes[5], VK_BUFFER_USAGE_STORAGE_BUFFER_BIT,
                  VK_MEMORY_PROPERTY_HOST_COHERENT_BIT |
                      VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT,
                  buffers[5], bufferMemories[5]);
+    // buffer for material table
+    createBuffer(bufferSizes[6], VK_BUFFER_USAGE_STORAGE_BUFFER_BIT,
+                 VK_MEMORY_PROPERTY_HOST_COHERENT_BIT |
+                     VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT,
+                 buffers[6], bufferMemories[6]);
     std::cout << "[VK]: All buffers created!" << std::endl;
 }
 
@@ -818,25 +824,24 @@ void VulkanTracer::fillQuadricBuffer() {
 
 void VulkanTracer::fillMaterialBuffer() {
     std::cout << "[VK]: Filling MaterialBuffer.." << std::endl;
-    // data is copied to the buffer
-    void* data;
-    vkMapMemory(device, bufferMemories[5], 0, bufferSizes[5], 0, &data);
-    PalikTable t;
-    if (!PalikTable::load("CU", &t)) {  // TODO(Rudi): not only for copper!
-        std::cout << "[VK]: error loading PalikTable!" << std::endl;
+
+    // material index buffer
+    {
+        // data is copied to the buffer
+        void* data;
+        vkMapMemory(device, bufferMemories[5], 0, bufferSizes[5], 0, &data);
+        memcpy(data, getMaterialIndexTable()->data(), bufferSizes[5]);
+        vkUnmapMemory(device, bufferMemories[5]);
     }
-    // memcpy(data, t.m_Lines.data(), bufferSizes[5]);
-    std::vector<double> vec;
-    for (auto x : t.m_Lines) {
-        vec.push_back(x.m_energy);
-        vec.push_back(x.m_n);
-        vec.push_back(x.m_k);
-        vec.push_back(0);
+
+    // material buffer
+    {
+        void* data;
+        vkMapMemory(device, bufferMemories[6], 0, bufferSizes[6], 0, &data);
+        memcpy(data, getMaterialTable()->data(), bufferSizes[6]);
+        vkUnmapMemory(device, bufferMemories[6]);
     }
-    assert(vec.size() == 324 * 4);
-    memcpy(data, vec.data(), bufferSizes[5]);
     std::cout << "[VK]: Done!" << std::endl;
-    vkUnmapMemory(device, bufferMemories[5]);
 }
 
 void VulkanTracer::createDescriptorSetLayout() {
@@ -862,13 +867,15 @@ void VulkanTracer::createDescriptorSetLayout() {
         {3, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 1, VK_SHADER_STAGE_COMPUTE_BIT,
          NULL},
         {4, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 1, VK_SHADER_STAGE_COMPUTE_BIT,
+         NULL},
+        {5, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 1, VK_SHADER_STAGE_COMPUTE_BIT,
          NULL}};
 
     VkDescriptorSetLayoutCreateInfo descriptorSetLayoutCreateInfo = {};
     descriptorSetLayoutCreateInfo.sType =
         VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
     // 2 bindings are used in this layout
-    descriptorSetLayoutCreateInfo.bindingCount = 5;
+    descriptorSetLayoutCreateInfo.bindingCount = 6;
     descriptorSetLayoutCreateInfo.pBindings =
         descriptorSetLayoutBinding;  // TODO
 
@@ -883,7 +890,7 @@ void VulkanTracer::createDescriptorSet() {
     */
     VkDescriptorPoolSize descriptorPoolSize = {};
     descriptorPoolSize.type = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
-    descriptorPoolSize.descriptorCount = 5;
+    descriptorPoolSize.descriptorCount = 6;
 
     VkDescriptorPoolCreateInfo descriptorPoolCreateInfo = {};
     descriptorPoolCreateInfo.sType =
@@ -913,7 +920,7 @@ void VulkanTracer::createDescriptorSet() {
     VK_CHECK_RESULT(vkAllocateDescriptorSets(device, &descriptorSetAllocateInfo,
                                              &descriptorSet));
 
-    for (uint32_t i = 0; i < buffers.size() - 3; i++) {
+    for (uint32_t i = 0; i < buffers.size(); i++) {
         // specify which buffer to use: input buffer
         VkDescriptorBufferInfo descriptorBufferInfo = {};
         descriptorBufferInfo.buffer = buffers[i];
@@ -923,47 +930,9 @@ void VulkanTracer::createDescriptorSet() {
         VkWriteDescriptorSet writeDescriptorSet = {};
         writeDescriptorSet.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
         writeDescriptorSet.dstSet =
-            descriptorSet;                  // write to this descriptor set.
-        writeDescriptorSet.dstBinding = i;  // write to the ist binding.
-        writeDescriptorSet.descriptorCount = 1;  // update a single descriptor.
-        writeDescriptorSet.descriptorType =
-            VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;  // storage buffer.
-        writeDescriptorSet.pBufferInfo = &descriptorBufferInfo;
-
-        // perform the update of the descriptor set.
-        vkUpdateDescriptorSets(device, 1, &writeDescriptorSet, 0, NULL);
-    }
-    {  // specify which buffer to use: input buffer
-        VkDescriptorBufferInfo descriptorBufferInfo = {};
-        descriptorBufferInfo.buffer = buffers[4];
-        descriptorBufferInfo.offset = 0;
-        descriptorBufferInfo.range = bufferSizes[4];
-
-        VkWriteDescriptorSet writeDescriptorSet = {};
-        writeDescriptorSet.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-        writeDescriptorSet.dstSet =
-            descriptorSet;                  // write to this descriptor set.
-        writeDescriptorSet.dstBinding = 3;  // write to the ist binding.
-        writeDescriptorSet.descriptorCount = 1;  // update a single descriptor.
-        writeDescriptorSet.descriptorType =
-            VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;  // storage buffer.
-        writeDescriptorSet.pBufferInfo = &descriptorBufferInfo;
-
-        // perform the update of the descriptor set.
-        vkUpdateDescriptorSets(device, 1, &writeDescriptorSet, 0, NULL);
-    }
-
-    {  // for material buffer
-        VkDescriptorBufferInfo descriptorBufferInfo = {};
-        descriptorBufferInfo.buffer = buffers[5];
-        descriptorBufferInfo.offset = 0;
-        descriptorBufferInfo.range = bufferSizes[5];
-
-        VkWriteDescriptorSet writeDescriptorSet = {};
-        writeDescriptorSet.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-        writeDescriptorSet.dstSet =
-            descriptorSet;                  // write to this descriptor set.
-        writeDescriptorSet.dstBinding = 4;  // write to the ist binding.
+            descriptorSet;  // write to this descriptor set.
+        writeDescriptorSet.dstBinding =
+            i - (i >= 4);  // write to the ist binding, or i-1 th binding
         writeDescriptorSet.descriptorCount = 1;  // update a single descriptor.
         writeDescriptorSet.descriptorType =
             VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;  // storage buffer.

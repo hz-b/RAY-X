@@ -32,7 +32,7 @@ void Application::loadDummyBeamline() {  // ! objects are created here
     const clock_t allBeginTime = clock();
 #endif
 
-    RAYX::SimulationEnv::get().m_numOfRays = 200;
+    RAYX::SimulationEnv::get().m_numOfRays = 20;
 
     EnergyDistribution dist = EnergyDistribution(EnergyRange(100, 0), true);
     std::shared_ptr<MatrixSource> matSourcePtr = std::make_shared<MatrixSource>(
@@ -44,9 +44,10 @@ void Application::loadDummyBeamline() {  // ! objects are created here
 
     // plane mirror with misalignment
     RAYX::GeometricUserParams pm_params = RAYX::GeometricUserParams(10);
-    RAYX::WorldUserParams w_coord = RAYX::WorldUserParams(
-        pm_params.getAlpha(), pm_params.getBeta(), 0, 10000,
-        std::vector<double>{1, 2, 3, 0.004, 0.005, 0.006});
+
+    RAYX::WorldUserParams w_coord =
+        RAYX::WorldUserParams(pm_params.getAlpha(), pm_params.getBeta(), 0,
+                              10000, std::vector<double>{0, 0, 0, 0, 0, 0});
     glm::dvec4 pos1 = w_coord.calcPosition();
     glm::dmat4x4 or1 = w_coord.calcOrientation();
     std::shared_ptr<RAYX::PlaneMirror> pm = std::make_shared<RAYX::PlaneMirror>(

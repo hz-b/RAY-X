@@ -31,6 +31,14 @@ struct Element{
 	dmat4 objectParameters;
 	dmat4 elementParameters;
 };
+
+struct PalikEntry{
+	double energy;
+	double n;
+	double k;
+	double empty; // for padding
+};
+
 layout(std140, binding = 0) buffer ibuf
 {
    Ray rayData[];
@@ -52,9 +60,14 @@ layout(std140, binding = 3) buffer xyzbuf
 {
 	dvec4 xyznull[];
 };
-layout(binding = 4) buffer material /* TODO: this is only for CU for now! */
+
+layout(binding = 4) buffer materialIndexBuf
 {
-	double nkp[]; // contains PALIK tables, in other words [energy, n, k]-entries
+	int nkpIdx[]; // can be indexed by material-index defined in Material.h to get the starting point of this material in the `nkp` table.
+};
+layout(binding = 5) buffer materialBuf
+{
+	PalikEntry nkp[]; // contains PALIK table of all materials concatenated together
 };
 
 
@@ -416,7 +429,7 @@ double r8_mach ( int i )
 		return 0.0;
 	}
 	
-	double [6] return_values = double[6] (0, 4.450147717014403E-308, 8.988465674311579E+307, 1.110223024625157E-016, 2.220446049250313E-016, 0.301029995663981E+000);  
+	double [6] return_values = double[6] (0, 4.450147717014403E-308, 8.988465674311579E+307, 1.110223024625157E-016, 2.220446049250313E-016, 0.301029995663981E+000);
 	return return_values[i];
 }
 
@@ -1218,16 +1231,16 @@ dvec2 cx_sin_of_one_over_z(dvec2 z) {
 }
 
 // Additions by Johan Karlsson (DonKarlssonSan) https://gist.github.com/DonKarlssonSan
-// https://gist.github.com/DonKarlssonSan/f87ba5e4e5f1093cb83e39024a6a5e72 
+// https://gist.github.com/DonKarlssonSan/f87ba5e4e5f1093cb83e39024a6a5e72
 #define cx_sub(a, b) dvec2(a.x - b.x, a.y - b.y)
 #define cx_add(a, b) dvec2(a.x + b.x, a.y + b.y)
 #define cx_abs(a) length(a)
 dvec2 cx_to_polar(dvec2 a) {
     double phi = r8_atan(a.y / a.x);
     double r = length(a);
-    return dvec2(r, phi); 
+    return dvec2(r, phi);
 }
-    
+ 
 // Complex power
 dvec2 cx_pow(dvec2 a, int n) {
     double angle = r8_atan2(a.y, a.x);
@@ -1693,7 +1706,7 @@ dvec4 getIntersectionPoint(Ray r, dmat4 quadric)
 		//r.position = dvec3(a, b, c);
 	}
 
-	// intersection point is in the negative direction (behind the position when the direction is followed forwards), set weight to 0 
+	// intersection point is in the negative direction (behind the position when the direction is followed forwards), set weight to 0
 	if( (x - r.position.x) / r.direction.x < 0 || (y - r.position.y) / r.direction.y < 0 || (z - r.position.z) / r.direction.z < 0) {
 		w = 0;
 	}
@@ -1926,15 +1939,23 @@ dvec4 getOpticalElementIntersection(Ray r, uint elementIndex){
 }
 
 dvec2 getRefractiveIndex(double energy, int material) {
-	int entrysize = 4;
-	if(material == 1) { // copper
-		for(int i = 0; i<nkp.length()-entrysize; i+=entrysize) { // find energy level
-			if(nkp[i] <= energy && energy < nkp[i+entrysize]) {
-				return dvec2(nkp[i+1], nkp[i+2]); // return refractive index for energy level
-			}			
+	if (material == -1) { // vacuum
+		return dvec2(1., 0.);
+	}
+
+	int low = nkpIdx[material]; // <= energy
+	int high = (material+1 < nkpIdx.length())? nkpIdx[material+1]-1 : nkp.length()-1; // >= energy
+
+	// binary search
+	while (high-low > 1) {
+		int center = (low+high)/2;
+		if (energy < nkp[center].energy) {
+			high = center;
+		} else {
+			low = center;
 		}
 	}
-	return dvec2(1,0); // vacuum
+	return dvec2(nkp[low].n, nkp[low].k); // return refractive index for energy level
 }
 
 // returns angle between ray direction and surface normal at intersection point
@@ -1946,7 +1967,7 @@ double getIncidenceAngle(Ray r, dvec4 normal) {
 	else if(ar > 1.0) ar = 1.0;
 
 	double theta = PI - r8_acos(ar);
-	int gt = int(theta > PI);
+	int gt = int(theta > PI/2);
 	// theta in [0, pi]
 	theta = gt * (PI - theta) + (1-gt) * theta;
 	return theta;
@@ -2008,8 +2029,8 @@ void fresnel(dvec2 cn1, dvec2 cn2, dvec2 cos_incidence, dvec2 cos_transmittance,
 void reflectance(double energy, double incidence_angle, inout dvec2 complex_S, inout dvec2 complex_P) {
 	dvec2 cos_incidence = dvec2( r8_cos(incidence_angle), 0.0); // complex number, initialization only for first layer, the others are then derived from this with snell's law
 
-	int material1 = 0; // vacuum
-	int material2 = 1; // copper
+	int material1 = -1; // vacuum
+	int material2 = 0; // copper
 	// todo number of layers: loop over layers from top to bottom, transmittance angle for each layer, so far only one layer (substrate?)
 	// store cosinuses in array, bc needed in later loop for fresnel (or maybe only one loop is enough?)
 	// todo refractive indices of materials in extra buffer?
@@ -2018,7 +2039,7 @@ void reflectance(double energy, double incidence_angle, inout dvec2 complex_S, i
 	dvec2 cos_transmittance = snell(cos_incidence, cn1, cn2);
 
 	// todo again iterate over layers but from bottom to top, update s and p polarization in each iteration:
-	fresnel(cn1, cn2, cos_transmittance, cos_incidence, complex_S, complex_P);
+	fresnel(cn2, cn1, cos_transmittance, cos_incidence, complex_S, complex_P);
 	// todo roughness (uses wavelength/energy)
 	// todo other calculations for layers that are not substrate (which is the first layer)
 	return;
@@ -2034,17 +2055,17 @@ dvec2 cartesian_to_euler(dvec2 complex) {
 		euler = dvec2(400,100);//dvec2(1.0/0.0, 1.0/0.0);
 		return euler;
 	}
-	euler = dvec2(r, r8_atan2(complex.y, complex.x)); // in rad?
+	euler = dvec2(r, r8_atan2(complex.y, complex.x)); // phi in rad
 	return euler;
 }
 
 /** computes the difference in the phases of 2 complex number written in euler form: r * e^(i * phi)
- * @param euler1 		first complex number // p
- * @param euler2		second complex number // s
+ * @param euler1 		first complex number // s 
+ * @param euler2		second complex number // p
  * @return delta = phi1 - phi2, in [-pi/2, pi/2] degrees
  */
 double phase_difference(dvec2 euler1, dvec2 euler2) {
-	double delta = euler2.y - euler1.y; // s -p
+	double delta = euler2.y - euler1.y; // p - s
 	delta = delta - int(delta > 180)*360.0 + int(delta < -180)*360.0;
 	return delta;
 }
@@ -2066,9 +2087,9 @@ void efficiency(Ray r, out double real_S, out double real_P, out double delta, d
 	dvec2 euler_P = cartesian_to_euler(complex_P);
 	dvec2 euler_S = cartesian_to_euler(complex_S);
 
-	delta = phase_difference(euler_P, euler_S);
-	real_S = complex_P.x;//euler_S.x;
-	real_P = complex_P.y; //euler_P.x;
+	delta = phase_difference(euler_S, euler_P);
+	real_S = euler_S.x;
+	real_P = euler_P.x;
 }
 
 /** creates a Müller matrix (see p. 32 of Schäfers, 2007)
@@ -2094,9 +2115,9 @@ dmat4 muller_matrix(double R_s, double R_p, double delta) {
  * @param real_P	real part of the complex p-polarization
  * @param delta		phase difference between complex s and p polarization
  * @param azimuthal	angle of rotation of element in xy plane (chi + dchi (misalignment))
- * @returns updated stokes vector of ray
+ * @returns updated stokes vector of ray, updates weight of ray
  */
-dvec4 update_stokes(Ray r, double real_S, double real_P, double delta, double azimuthal) {
+void update_stokes(inout Ray r, double real_S, double real_P, double delta, double azimuthal, inout uint64_t ctr) {
 	dvec4 stokes_old = r.stokes;
 	double c_chi = r8_cos(azimuthal);
 	double s_chi = r8_sin(azimuthal);
@@ -2106,11 +2127,13 @@ dvec4 update_stokes(Ray r, double real_S, double real_P, double delta, double az
 					0, 0, 0, 1);
 	dmat4 inv_rot = transpose(rot);
 
-	stokes_old = rot * stokes_old;
-	dvec4 stokes_new = muller_matrix(real_S, real_P, delta) * stokes_old;
-	stokes_new = inv_rot * stokes_new;
+	dvec4 stokes_new = muller_matrix(real_S, real_P, delta) * rot * stokes_old;;
+	r.stokes = inv_rot * stokes_new;
 
-	return stokes_new;
+	double rn = squaresDoubleRNG(ctr);
+	// throw ray away with certain probability
+	if((r.stokes.x / stokes_old.x) - rn <= 0) r.weight = 0;
+	return;
 }
 
 /**
@@ -2911,10 +2934,7 @@ Ray traceMirror(Ray r, const int elementIndex, inout uint64_t ctr, dvec4 interse
 	double delta;
 	double incidence_angle = getIncidenceAngle(r, normal); // getTheta
 	efficiency(r, real_S, real_P, delta, incidence_angle);
-	r.stokes = dvec4(real_S, real_P, delta, incidence_angle);
-	//r.stokes = dvec4(complex_S, complex_P);
-	//update_stokes(r, real_S, real_P, delta, azimuthal_angle); 
-	
+	update_stokes(r, real_S, real_P, delta, azimuthal_angle, ctr); 
 	r.order = 0;
 	return r;
 }
@@ -3404,9 +3424,15 @@ void testFunctions() {
 		res.stokes = dvec4(complex_euler3, complex_euler4);
 		rayData[uint(gl_GlobalInvocationID)] = res;
 	}else if(settings == 26) { // test material loading
-		rayData[uint(gl_GlobalInvocationID)].position.x = nkp[0];
-		rayData[uint(gl_GlobalInvocationID)].position.y = nkp[1];
-		rayData[uint(gl_GlobalInvocationID)].position.z = nkp[2];
+		rayData[uint(gl_GlobalInvocationID)].position.x = nkp[0].energy;
+		rayData[uint(gl_GlobalInvocationID)].position.y = nkp[0].n;
+		rayData[uint(gl_GlobalInvocationID)].position.z = nkp[0].k;
+		rayData[uint(gl_GlobalInvocationID)].weight = nkpIdx[0];
+
+		rayData[uint(gl_GlobalInvocationID)].direction.x = nkp[nkpIdx[1]].energy;
+		rayData[uint(gl_GlobalInvocationID)].direction.y = nkp[nkpIdx[1]].n;
+		rayData[uint(gl_GlobalInvocationID)].direction.z = nkp[nkpIdx[1]].k;
+		rayData[uint(gl_GlobalInvocationID)].energy = nkpIdx[1];
 	}
 	// store results to output buffer
 	outputData[uint(gl_GlobalInvocationID)] = rayData[uint(gl_GlobalInvocationID)];
