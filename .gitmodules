@@ -4,3 +4,6 @@
 [submodule "Extern/HighFive"]
 	path = Extern/HighFive
 	url = https://github.com/BlueBrain/HighFive.git
+[submodule "Extern/matplotlib"]
+	path = Extern/matplotlib-cpp
+	url = https://github.com/lava/matplotlib-cpp.git
