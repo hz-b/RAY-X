@@ -1,5 +1,3 @@
-#ifndef CI  // highfive doesn't work in CI
-
 #include "H5Writer.hpp"
 
 #include <sstream>
@@ -13,5 +11,3 @@ void H5Writer::appendRays(const std::vector<double>& outputRays, size_t index) {
 
     H5Easy::dump(m_file, ss.str(), outputRays);
 }
-
-#endif
