@@ -109,9 +109,12 @@ target_compile_definitions(${PROJECT_NAME}
 )
 
 find_package(Vulkan REQUIRED)
-
+find_package(Python3 COMPONENTS Interpreter Development NumPy REQUIRED)
 target_link_libraries(${PROJECT_NAME} 
     PUBLIC Vulkan::Vulkan
+    PUBLIC Python3::NumPy
+    PUBLIC Python3::Python
+    PUBLIC Python3::Module
 )
 
 target_include_directories(${PROJECT_NAME}
@@ -119,6 +122,7 @@ target_include_directories(${PROJECT_NAME}
     PUBLIC ${RayCore_SOURCE_DIR}/../../Extern/glm/glm/
     PUBLIC ${RayCore_SOURCE_DIR}/../../Extern/rapidxml-1.13/
     PUBLIC ${RayCore_SOURCE_DIR}/../../Extern/HighFive/include/
+    PUBLIC ${RayCore_SOURCE_DIR}/../../Extern/matplotlib-cpp/
 )
 
 add_dependencies(${PROJECT_NAME} COMPILE_SHADER)

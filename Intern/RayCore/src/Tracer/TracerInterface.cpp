@@ -11,6 +11,9 @@
 #include "Model/Beamline/OpticalElement.h"
 #include "Ray.h"
 #include "Writer/Writer.hpp"
+#include "matplotlibcpp.h"
+
+namespace plt = matplotlibcpp;
 
 namespace RAYX {
 TracerInterface::TracerInterface() : m_numElements(0), m_numRays(0) {
@@ -82,6 +85,19 @@ bool TracerInterface::run() {
                    sizeof(double));
         doubleVec.resize((*outputRayIterator).size() *
                          VULKANTRACER_RAY_DOUBLE_AMOUNT);
+
+        {
+            RAYX_PROFILE_SCOPE("Footprint");
+            // Get x and y coordinates of the ray
+            std::vector<double> xCoords(doubleVec.size() / RAY_DOUBLE_COUNT);
+            std::vector<double> yCoords(doubleVec.size() / RAY_DOUBLE_COUNT);
+            for (size_t i = 0; i < doubleVec.size() / RAY_DOUBLE_COUNT; i++) {
+                xCoords[i] = doubleVec[i * RAY_DOUBLE_COUNT];
+                yCoords[i] = doubleVec[i * RAY_DOUBLE_COUNT + 1];
+            }
+            plt::scatter(xCoords, yCoords);
+            plt::show();
+        }
 
         RAYX_D_LOG << "sample ray: " << doubleVec[0] << ", " << doubleVec[1]
                    << ", " << doubleVec[2] << ", " << doubleVec[3] << ", "
