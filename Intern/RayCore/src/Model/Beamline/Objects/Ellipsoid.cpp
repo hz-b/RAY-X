@@ -285,7 +285,6 @@ std::shared_ptr<Ellipsoid> Ellipsoid::createFromXML(
         return nullptr;
     }
     int m_figRot;
-    // const char* fig_rot; // TODO unused
     if (!xml::paramInt(node, "figureRotation", &m_figRot)) {
         return nullptr;
     }
@@ -325,7 +324,6 @@ std::shared_ptr<Ellipsoid> Ellipsoid::createFromXML(
     }
 
     int mCoordSys;
-    // const char* fig_rot; // TODO unused
     if (!xml::paramInt(node, "misalignmentCoordinateSystem", &mCoordSys)) {
         return nullptr;
     }

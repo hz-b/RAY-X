@@ -158,4 +158,69 @@ Beamline Importer::importBeamline(const char* filename) {
     return beamline;
 }
 
+// ------RAY-UI related. (Used for backwards compatibility to legacy Sequential
+// tracing)
+
+BeamlineHierarchy::BeamlineHierarchy() {
+    RAYX_LOG << "A new Hierarchy created.";
+}
+
+BeamlineHierarchy::~BeamlineHierarchy() {}
+
+// Add Object to Beamline and calculate its position and orientation
+void BeamlineHierarchy::addAbstractBeamlineOject(
+    double incidence, double entranceArmLength, double exitArmLength,
+    int mCoordSys, double mAzimAngle, std::array<double, 6> mis,
+    double distancePreceding, BeamlineElementType objectType) {
+    GeometricUserParams g_params =
+        GeometricUserParams(incidence, entranceArmLength, exitArmLength);
+
+    double tangentAngle = g_params.calcTangentAngle(
+        incidence, entranceArmLength, exitArmLength, mCoordSys);
+    WorldUserParams w_coord = WorldUserParams(
+        g_params.getAlpha(), g_params.getBeta(), degToRad(mAzimAngle),
+        distancePreceding, mis, tangentAngle);
+
+    glm::vec4 position = w_coord.calcPosition();
+    glm::mat4x4 orientation = w_coord.calcOrientation();
+    // Push to Vector
+    m_AbstractElements.push_back(std::make_shared<AbstractBeamlineElement>(
+        distancePreceding, position, orientation, objectType));
+}
+
+void BeamlineHierarchy::printBeamlineHierarchy() {
+    std::string output_string;
+    for (const auto& obj : m_AbstractElements) {
+        output_string = output_string + (*obj).getName() + "→";
+    }
+    output_string.pop_back();
+    RAYX_LOG << output_string;
+}
+
+std::vector<std::shared_ptr<AbstractBeamlineElement>>
+BeamlineHierarchy::getBeamlineElements() const {
+    return m_AbstractElements;
+}
+
+AbstractBeamlineElement::AbstractBeamlineElement(double distancePreceding,
+                                                 glm::vec4 position,
+                                                 glm::dmat4x4 orientation,
+                                                 BeamlineElementType objectType)
+    : m_distancePreceding(distancePreceding),
+      m_postion(position),
+      m_orientation(orientation),
+      m_type(objectType) {}
+
+double AbstractBeamlineElement::getDistancePreceding() const {
+    return m_distancePreceding;
+}
+
+glm::dvec4 AbstractBeamlineElement::getPosition() const { return m_postion; }
+glm::dmat4x4 AbstractBeamlineElement::getOrientation() const {
+    return m_orientation;
+}
+
+BeamlineElementType AbstractBeamlineElement::getElementType() const {
+    return m_type;
+}
 }  // namespace RAYX
