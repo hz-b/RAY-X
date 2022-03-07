@@ -36,31 +36,32 @@ void TracerInterface::generateRays(std::shared_ptr<LightSource> source) {
     // only one Source for now
     if (!source) return;
     RAYX_D_LOG << "add rays";
-    m_RayTracer.addRayVector(source->getRays());
+    // m_RayTracer.addRayVector(source->getRays());
 }
 
 void TracerInterface::setBeamlineParameters() {
-    m_RayTracer.setBeamlineParameters(1, m_numElements, m_numRays);
+    // m_RayTracer.setBeamlineParameters(1, m_numElements, m_numRays);
 }
 
 void TracerInterface::addOpticalElementToTracer(
-    std::shared_ptr<OpticalElement> element) {
-    m_RayTracer.addArrays(element->getSurfaceParams(), element->getInMatrix(),
-                          element->getOutMatrix(),
-                          element->getObjectParameters(),
-                          element->getElementParameters());
+    [[maybe_unused]] std::shared_ptr<OpticalElement> element) {
+    /*
+m_RayTracer.addArrays(element->getSurfaceParams(), element->getInMatrix(),
+                      element->getOutMatrix(),
+                      element->getObjectParameters(),
+                      element->getElementParameters());
+                      */
 }
 
 bool TracerInterface::run() {
     RAYX_PROFILE_FUNCTION();
 
-    m_RayTracer.run();  // run tracer
+    // m_RayTracer.run();  // run tracer
     RAYX_D_LOG << "Run succeeded!";
 
     // transform in to usable data
     auto doubleVecSize = RAY_MAX_ELEMENTS_IN_VECTOR * RAY_DOUBLE_COUNT;
     std::vector<double> doubleVec(doubleVecSize);
-    size_t index = 0;
 
     std::unique_ptr<Writer> w =  // TODO(rudi): maybe allow CSVWriter to also be
                                  // used in non-CI builds
@@ -71,6 +72,7 @@ bool TracerInterface::run() {
 #endif
 
     // get rays from tracer
+    /*
     for (auto outputRayIterator = m_RayTracer.getOutputIteratorBegin(),
               outputIteratorEnd = m_RayTracer.getOutputIteratorEnd();
          outputRayIterator != outputIteratorEnd; outputRayIterator++) {
@@ -92,10 +94,11 @@ bool TracerInterface::run() {
         w->appendRays(doubleVec, index);
         index = index + (*outputRayIterator).size();
     }
+    */
 
     // clean up tracer to avoid memory leaks
-    m_RayTracer.cleanTracer();
-    m_RayTracer.cleanup();
+    // m_RayTracer.cleanTracer();
+    // m_RayTracer.cleanup();
     // intentionally not RAYX_DEBUG()
     RAYX_LOG << "Done.";
     return true;
