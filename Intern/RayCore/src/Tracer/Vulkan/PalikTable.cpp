@@ -11,7 +11,13 @@
 
 bool PalikTable::load(const char* element, PalikTable* out) {
     std::string f = "Data/PALIK/" + std::string(element) + ".NKP";
-    std::ifstream s(resolvePath(f));
+    auto resolved = resolvePath(f);
+
+    RAYX_WARN << "@David:";
+    RAYX_WARN << element;
+    RAYX_WARN << f;
+    RAYX_WARN << resolved;
+    std::ifstream s(resolved);
 
     if (s.fail()) {
         return false;
