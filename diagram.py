@@ -14,10 +14,10 @@ def plot(rayx_times, rayui_times, beamlines):
 	rects_ui = plt.bar(ind + 0.15, rayui_times, 0.15, color='#00ff00', label='RAY-UI')
 
 	plt.xlabel('Beamlines')
-	plt.xticks([r + 0.15/2 for r in range(3)], beamlines)
+	plt.xticks([r + 0.15/2 for r in range(N)], beamlines)
 
 	plt.ylabel('time (ms)')
 	plt.legend()
 	plt.show()
 
-plot([1, 3, 5], [2, 4, 6], ["A", "B", "C"])
+plot([1, 3, 5, 3, 2], [2, 4, 6, 3, 3], ["A", "B", "C", "D", "E"])
