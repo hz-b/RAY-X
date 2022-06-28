@@ -8,6 +8,6 @@
 
 namespace RAYX {
 
-Beamline importBeamline(std::filesystem::path);
+RAYX_API Beamline importBeamline(std::filesystem::path);
 
 }  // namespace RAYX

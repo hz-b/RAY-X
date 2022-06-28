@@ -27,7 +27,7 @@ add_test(NAME ${BINARY} COMMAND ${BINARY})
 target_precompile_headers(${BINARY} PRIVATE testsPCH.h)
 set(CMAKE_PCH_INSTANTIATE_TEMPLATES ON)
 #if (WIN32)
-    #target_compile_definitions(${BINARY} PUBLIC RAYX_PLATFORM_WINDOWS)
+    #target_compile_definitions(${BINARY} PUBLIC RAYX_PLATFORM_MSVC)
 #endif ()
 target_link_libraries(${BINARY} PUBLIC RayCore gtest gmock)
 

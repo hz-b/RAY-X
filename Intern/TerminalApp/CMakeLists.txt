@@ -32,9 +32,9 @@ file(COPY python DESTINATION ${CMAKE_BINARY_DIR}/bin)
 
 add_executable(${PROJECT_NAME} main.cpp TerminalApp.cpp TerminalApp.h PythonInterp.cpp CommandParser.cpp)
 
-if (WIN32)
-    target_compile_definitions(${PROJECT_NAME} PUBLIC RAYX_PLATFORM_WINDOWS)
-endif ()
+#CLI11
+#Command Parser
+target_link_libraries(${PROJECT_NAME} PRIVATE CLI11::CLI11)
 
 find_package(Python3 REQUIRED)
 find_package (PythonLibs REQUIRED)
@@ -44,6 +44,6 @@ target_include_directories(${PROJECT_NAME} PRIVATE ${PROJECT_BINARY_DIR})
 
 include_directories(${PYTHON_INCLUDE_DIRS})
 
-target_link_libraries(${PROJECT_NAME} RayCore)
+target_link_libraries(${PROJECT_NAME} PRIVATE RayCore)
 
-target_link_libraries(${PROJECT_NAME} ${PYTHON_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} PRIVATE ${PYTHON_LIBRARIES})

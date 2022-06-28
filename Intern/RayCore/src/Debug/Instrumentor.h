@@ -142,6 +142,9 @@ class RAYX_API InstrumentationTimer {
 #define RAYX_PROFILE_END_SESSION() ::RAYX::Instrumentor::Get().EndSession()
 #define RAYX_PROFILE_SCOPE(name) \
     ::RAYX::InstrumentationTimer timer##__LINE__(name)
+#if !defined(__PRETTY_FUNCTION__) && !defined(__GNUC__)
+#define __PRETTY_FUNCTION__ __FUNCSIG__
+#endif
 #define RAYX_PROFILE_FUNCTION() RAYX_PROFILE_SCOPE(__PRETTY_FUNCTION__)
 #else
 #define RAYX_PROFILE_BEGIN_SESSION(name, filepath)

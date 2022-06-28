@@ -1,11 +1,27 @@
 #include "PythonInterp.h"
 
-#define PY_SSIZE_T_CLEAN
-#include <Python.h>
-
 #include <stdexcept>
 
 #include "Debug.h"
+
+#if defined(WIN32)
+#include <stdlib.h>
+int setenv(const char* name, const char* value, int overwrite) {
+    int errcode = 0;
+    if (!overwrite) {
+        const char* envStr = getenv(name);
+        if (envStr != NULL) {
+            errcode = -1;
+        } else {
+            errcode = 0;
+        }
+    }
+    if (errcode == 0) {
+        errcode = _putenv_s(name, value);
+    }
+    return errcode;
+}
+#endif
 
 PythonInterp::PythonInterp() {}
 
@@ -77,14 +93,16 @@ void PythonInterp::execute() {
         PyErr_Print();
     } else {
         PyErr_Print();
-        throw std::runtime_error("Error while running the python module: [ERR010]" +
-                                 (std::string)(m_funcName));
+        throw std::runtime_error(
+            "Error while running the python module: [ERR010]" +
+            (std::string)(m_funcName));
     }
 
     if (PyLong_AsLong(m_presult) == 0 || !m_presult) {
         cleanup();
-        throw std::runtime_error("Error while running the python module: [ERR011]" +
-                                 (std::string)(m_funcName));
+        throw std::runtime_error(
+            "Error while running the python module: [ERR011]" +
+            (std::string)(m_funcName));
     }
     cleanup();
 }

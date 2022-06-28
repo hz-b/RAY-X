@@ -1,69 +1,48 @@
 #include "CommandParser.h"
 
-CommandParser::CommandParser()  {}
+// CommandParser::CommandParser()  {}
 
-CommandParser::CommandParser(int ___argc, char* const* ___argv) {
-    int c;
-    int option_index;
-    extern int opterr;
-    opterr = 0;  // Set opt auto error output to silent
+CommandParser::CommandParser(int ___argc, char* const* ___argv)
+    : m_cli11{std::make_shared<CLI::App>("Terminal Application for RAY-X")} {
+    for (const std::pair<char, Options>& option : m_ParserCommands) {
+        // Full name string
+        std::string _name = "";
+        _name += "-";
+        _name += option.first; // Short argument
+        _name += ",--";
+        _name.append(option.second.full_name); // Full argument
 
-    const struct option long_options[] = {{"plot", no_argument, 0, 'p'},
-                                          {"input", required_argument, 0, 'i'},
-                                          {"ocsv", no_argument, 0, 'c'},
-                                          {"version", no_argument, 0, 'v'},
-                                          {"help", no_argument, 0, 'h'},
-                                          {"cpu", no_argument, 0, 'x'},
-                                          {"benchmark", no_argument, 0, 'b'},
-                                          {"multipleplot", no_argument, 0, 'm'},
-                                          {0, 0, 0, 0}};                                      
-    while ((c = getopt_long(
-                ___argc, ___argv,
-                "pi:cvhxbm",  // : required, :: optional, 'none' nothing
-                long_options, &option_index)) != -1) {
-        switch (c) {
-            case '?':
-                if (optopt == 'i')
-                    RAYX_ERR << "Option -" << static_cast<char>(optopt)
-                             << " needs an input RML file.\n";
-                else if (isprint(optopt))
-                    RAYX_ERR << "Unknown option -" << static_cast<char>(optopt)
-                             << ".\n";
-                else
-                    RAYX_ERR << "Unknown option character. \n";
-                getHelp();
-                exit(1);
-            case 'h':
-                getHelp();
-                exit(1);
-            case 'v':
-                getVersion();
-                exit(1);
-            case 'p':
-                m_optargs.m_plotFlag = OptFlags::Enabled;
-                break;
-            case 'c':
-                m_optargs.m_csvFlag = OptFlags::Enabled;
-                break;
-            case 'i':
-                m_optargs.m_providedFile = optarg;
-                break;
-            case 'x':
-                m_optargs.m_cpuFlag = OptFlags::Enabled;
-                break;
-            case 'b':
-                m_optargs.m_benchmark = OptFlags::Enabled;
-                break;
-            case 'm':
-                m_optargs.m_multiplePlots = OptFlags::Enabled;
-                break;
-            case 0:
-                RAYX_ERR << "No option given.";
-                break;
-            default:
-                abort();
+        const OptionType _type = option.second.type;
+        const std::string _description(option.second.description);
+        if ( _type == OptionType::BOOL) {          
+            m_cli11.get()->add_flag(_name, *static_cast<bool*>(option.second.option_flag),
+                                      _description);                        
+        } else if (_type == OptionType::STRING) {
+            m_cli11.get()->add_option(_name, *static_cast<std::string*>(option.second.option_flag),
+                                      _description);
         }
+    }
+
+    ///// Parse
+    try {
+        m_cli11.get()->parse(___argc, ___argv);
+    } catch (const CLI::ParseError &e) {
+        m_cli11_return = m_cli11.get()->exit(e);
+        if((e.get_name() == "CallForHelp") ||  (e.get_name() == "CallForAllHelp"))
+            exit(1);
+        else
+            RAYX_D_ERR << "CLI ERROR" << m_cli11_return << " " << e.get_name();
     }
 }
 
-CommandParser::~CommandParser(){}
+void CommandParser::analyzeCommands(){
+    if(m_args.m_dummyFlag && (m_args.m_providedFile != "")){
+        RAYX_ERR << "Dummy Beamline and RML Beamline cannot be loaded at the same time.";
+    }
+    if(m_args.m_multiplePlots && !(m_args.m_plotFlag)){
+        RAYX_ERR << "Please use --mult only when using --plot.";
+    }
+}
+
+
+CommandParser::~CommandParser() {}

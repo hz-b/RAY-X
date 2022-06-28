@@ -1,5 +1,7 @@
 #include "Cylinder.h"
 
+#include <ext/scalar_constants.hpp>
+
 #include "Debug.h"
 
 namespace RAYX {
@@ -74,7 +76,7 @@ Cylinder::~Cylinder() {}
  *
  */
 void Cylinder::setRadius() {
-    double theta = radToDeg(m_incidence) * M_PI / 180.0;
+    double theta = radToDeg(m_incidence) * glm::pi<double>() / 180.0;
     if (m_direction == CylinderDirection::LongRadiusR) {
         m_radius = 2.0 / sin(theta) /
                    (1.0 / m_entranceArmLength + 1.0 / m_exitArmLength);

@@ -1,6 +1,6 @@
 #include "Quadric.h"
 
-#include <math.h>
+#include <cmath>
 
 #include "Debug.h"
 

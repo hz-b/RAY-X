@@ -1,13 +1,13 @@
 #include "PathResolver.h"
 
-#include <Debug.h>
-
 #include <filesystem>
 #include <optional>
 
+#include "Debug.h"
+
 static std::optional<std::filesystem::path> ROOT;
 
-void initPathResolver(char* executablePath) {
+void RAYX_API initPathResolver(char* executablePath) {
     std::filesystem::path p = std::filesystem::canonical(
         executablePath);  // ray-x/build/bin/TerminalApp
     p = p.parent_path();  // ray-x/build/bin/
@@ -16,7 +16,7 @@ void initPathResolver(char* executablePath) {
     ROOT = p;
 }
 
-std::string resolvePath(std::string path) {
+std::string RAYX_API resolvePath(std::string path) {
     if (!ROOT) {
         RAYX_ERR
             << "can not resolve path without prior call to initPathResolver";

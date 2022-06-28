@@ -1,6 +1,6 @@
 #include "BeamlineObject.h"
 
-#include <math.h>
+#include <cmath>
 
 namespace RAYX {
 BeamlineObject::BeamlineObject(const char* name) : m_name(name) {}

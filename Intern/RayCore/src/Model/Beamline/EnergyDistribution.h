@@ -1,14 +1,15 @@
 #pragma once
 
-#include <Data/DatFile.h>
-
 #include <random>
 #include <variant>
+
+#include "Core.h"
+#include "Data/DatFile.h"
 
 namespace RAYX {
 /** describes the interval `[m_CenterEnergy - m_EnergySpread/2, m_CenterEnergy +
  * m_EnergySpread/2]` */
-struct EnergyRange {
+struct RAYX_API EnergyRange {
     double m_centerEnergy;
     double m_energySpread;
 
@@ -24,7 +25,7 @@ struct EnergyRange {
  * can either be a `EnergyRange` being a uniform distribution in some interval,
  * or a `DatFile` which means that the distribution is loaded from a .DAT file.
  */
-class EnergyDistribution {
+class RAYX_API EnergyDistribution {
   public:
     EnergyDistribution();  // TODO this default-constructor is required because
                            // LightSource also has one, do we actually want it

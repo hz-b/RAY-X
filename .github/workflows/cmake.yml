@@ -45,5 +45,5 @@ jobs:
 
     - name: Test
       working-directory: ${{github.workspace}}/build/bin
-      run: ./RayReworked_tst -x
+      run: ./RAYX_tst -x
       

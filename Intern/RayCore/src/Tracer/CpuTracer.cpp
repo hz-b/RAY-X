@@ -108,6 +108,7 @@ void CpuTracer::trace(const Beamline& beamline) {
 
     // Run the tracing by for all rays
     for (int i = 0; i < CPP_TRACER::numberOfRays; i++) {
+        RAYX_LOG << i ;
         CPP_TRACER::gl_GlobalInvocationID = i;
         CPP_TRACER::main();
     }

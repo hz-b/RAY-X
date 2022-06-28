@@ -856,6 +856,7 @@ void bessel_diff(double radius, double wl, INOUT(double) dphi, INOUT(double) dps
  * @return result stored in dAngle
  */
 void fraun_diff(double dim, double wl, INOUT(double) dAngle, INOUT(uint64_t) ctr) {
+    int ous = 0; 
     if (dim == 0) return;        // no diffraction in this direction
     double b   = dim * 1e06;     // slit opening
     double div = 10.0 * wl / b;  // up to 2nd maximum
@@ -873,7 +874,21 @@ void fraun_diff(double dim, double wl, INOUT(double) dAngle, INOUT(uint64_t) ctr
             wd = r8_sin(u) / u;
             wd = wd * wd;
         }
+
         c = wd - rna[1];
+        #ifdef CPP
+        if (abs(c + 0.580089) < 0.0001){
+            RAYX_D_LOG << "Start!";
+        }
+        #endif
+        ous = ous +1 ;
+
+        #ifdef CPP
+        RAYX_D_LOG << "Inside fraund_diff c =  " << c ; 
+        if (ous> 50){
+           exit(1);
+        }
+        #endif
     }
 }
 
@@ -891,7 +906,13 @@ void diffraction(int iopt, double xLength, double yLength, double wl, INOUT(doub
                 xl = 0;
             }
         }
+        #ifdef CPP
+        RAYX_D_LOG << "---------" ; 
+        #endif
         fraun_diff(xl, wl, dPhi, ctr);
+        #ifdef CPP
+        RAYX_D_LOG << "---------" ;
+        #endif
         fraun_diff(yl, wl, dPsi, ctr);
     } else {  // circular slit
         if (iopt == 1) {

@@ -1,5 +1,3 @@
-#! ./rayxvenv/bin/python3
-
 import matplotlib.pyplot as plt
 from matplotlib import cm
 import pandas as pd

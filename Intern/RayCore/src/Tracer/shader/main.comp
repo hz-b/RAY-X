@@ -168,6 +168,9 @@ void dynamicElements() {
     double bounce = 1;
     // Iterate through all bounces
     for (int i = 0; i < maxBounces; i++) {
+        #ifdef CPP
+        RAYX_D_LOG << "Inside maxbounce " << i ; 
+        #endif
         ray = rayData[uint(gl_GlobalInvocationID)];
 
         lastClosestElementIndex = closestElementIndex;
@@ -218,6 +221,11 @@ void dynamicElements() {
 
         // Calculate interaction(reflection,material, absorption etc.) of ray with detected next element
         type = int(nextElement.surfaceParams[3][0]);
+
+        #ifdef CPP
+        RAYX_D_LOG << "before type if" << i <<  " & type " << type; 
+        #endif
+
         if (type == 0) {  // plane + sphere mirror
             rayData[uint(gl_GlobalInvocationID)] = traceMirror(rayData[uint(gl_GlobalInvocationID)], closestElementIndex, ctr, closestHitpoint);
 
