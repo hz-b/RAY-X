@@ -1,0 +1,384 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Transformation between coordinate systems - RAY-X Wiki</title>
+        <!-- Custom HTML head -->
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../index.html">Introduction</a></li><li class="chapter-item expanded "><a href="../Developer/Developer.html"><strong aria-hidden="true">1.</strong> Developer Area</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../Developer/How-to-Build.html"><strong aria-hidden="true">1.1.</strong> How to Build</a></li><li class="chapter-item expanded "><a href="../Developer/Style-Guide-for-Programming-in-Ray.html"><strong aria-hidden="true">1.2.</strong> Style Guide for Programming in RAY</a></li><li class="chapter-item expanded "><a href="../Developer/Testing.html"><strong aria-hidden="true">1.3.</strong> Testing</a></li><li class="chapter-item expanded "><a href="../Developer/How-to-use-our-formatter.html"><strong aria-hidden="true">1.4.</strong> How to use our Formatter</a></li><li class="chapter-item expanded "><a href="../Developer/How-to-use-Doxygen.html"><strong aria-hidden="true">1.5.</strong> How to use Doxygen</a></li><li class="chapter-item expanded "><a href="../Developer/PRNGs-on-the-GPU.html"><strong aria-hidden="true">1.6.</strong> PRNGs on the GPU</a></li><li class="chapter-item expanded "><a href="../Developer/Transformation-between-coordinate-systems.html" class="active"><strong aria-hidden="true">1.7.</strong> Transformation between coordinate systems</a></li><li class="chapter-item expanded "><a href="../Developer/Quad(ric)-function.html"><strong aria-hidden="true">1.8.</strong> Quad(ric) Function</a></li><li class="chapter-item expanded "><a href="../Developer/Approximation-of-ray-object-intersection-in-the-case-of-quadric-surfaces.html"><strong aria-hidden="true">1.9.</strong> Approximation of ray object intersection in the case of quadric surfaces</a></li><li class="chapter-item expanded "><a href="../Developer/Efficiency.html"><strong aria-hidden="true">1.10.</strong> Efficiency calculations</a></li><li class="chapter-item expanded "><a href="../Developer/Plane-Mirror.html"><strong aria-hidden="true">1.11.</strong> Plane Mirror</a></li><li class="chapter-item expanded "><a href="../Developer/RZP.html"><strong aria-hidden="true">1.12.</strong> Reflection Zone Plate (RZP)</a></li><li class="chapter-item expanded "><a href="../Developer/VSCode-recommended-Extensions.html"><strong aria-hidden="true">1.13.</strong> VSCode recommended Extensions</a></li><li class="chapter-item expanded "><a href="../Developer/Debugging.html"><strong aria-hidden="true">1.14.</strong> Debugging</a></li></ol></li><li class="chapter-item expanded "><a href="../APIUser/APIUser.html"><strong aria-hidden="true">2.</strong> API User Area</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../APIUser/How-to-use-RayCore.html"><strong aria-hidden="true">2.1.</strong> How to use RayCore</a></li><li class="chapter-item expanded "><a href="../APIUser/RAYX-Profiling.html"><strong aria-hidden="true">2.2.</strong> RAY-X Profiling</a></li><li class="chapter-item expanded "><a href="../APIUser/Object-Coordinate-System.html"><strong aria-hidden="true">2.3.</strong> Object Coordinate System</a></li><li class="chapter-item expanded "><a href="../APIUser/User-vs-Model-Parameter.html"><strong aria-hidden="true">2.4.</strong> User vs Model Parameter</a></li><li class="chapter-item expanded "><a href="../APIUser/Ray-generation.html"><strong aria-hidden="true">2.5.</strong> Ray generation</a></li><li class="chapter-item expanded "><a href="../APIUser/VulkanTracer.html"><strong aria-hidden="true">2.6.</strong> Vulkan Tracer</a></li></ol></li><li class="chapter-item expanded "><a href="../AppUser/AppUser.html"><strong aria-hidden="true">3.</strong> App User Area</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../AppUser/How-to-use-the-TerminalApp.html"><strong aria-hidden="true">3.1.</strong> How to use TerminalApp</a></li><li class="chapter-item expanded "><a href="../AppUser/Literature.html"><strong aria-hidden="true">3.2.</strong> Literature</a></li></ol></li><li class="chapter-item expanded "><a href="../Link-Dump.html"><strong aria-hidden="true">4.</strong> Link Dump</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">RAY-X Wiki</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="transformation-between-coordinate-systems"><a class="header" href="#transformation-between-coordinate-systems">Transformation between coordinate systems</a></h1>
+<h2 id="how-to-calculate-world-coordinates"><a class="header" href="#how-to-calculate-world-coordinates">How to calculate World Coordinates</a></h2>
+<p>This explains how to get world coordinates (global position and orientation of an optical element) from the sequential setup of a beamline that is often used, where the position and orientation of an element is described with distances and rotations relative to its predecesor.</p>
+<p>First a small introduction to rotation matrices which is not super relevant for the transformations but might help to visualize the rotations and understand why some angles are positive and others negative.</p>
+<details><summary>Rotation Matrices</summary>
+<h3 id="rotation-matrices"><a class="header" href="#rotation-matrices">Rotation matrices</a></h3>
+<p>A rotation through an angle $\theta$ can either be active or passive.
+An active rotation around for example the z-axis through the angle $\theta$ rotates the point within the coordinate system. Thereby, the coordinates of the point are changed whereas the coordinate system is left unchanged. When looking along the rotation axis in a right-handed coordinate system towards the origin, the rotation direction is counter-clockwise.</p>
+<p>$$
+R_a({\theta}) = 
+\begin{bmatrix}
+\cos(\theta) &amp; -\sin(\theta) &amp; 0 \
+\sin(\theta) &amp; \cos(\theta) &amp; \
+0           &amp; 0         &amp; 1 
+\end{bmatrix}
+$$</p>
+<p>A passive rotation leaves the position of the vector unchanged and rotates the axes of the coordinate system relative to the vector i.e. rotates the basis vectors (change of basis). When looking along the rotation-axis towards the origin in a right-handed coordinate system, the rotation of the rotating axes is clockwise. Thus, it is defined as an active rotation (applied to the basis vectors) in the other direction i.e. through the negative angle ($\cos(-\theta) = \cos(\theta)$ and $-\sin(\theta) = \sin(-\theta)$):</p>
+<p>$$   R_p({\theta}) = \begin{bmatrix}
+\cos(\theta) &amp; \sin(\theta) &amp; 0 \
+-\sin(\theta) &amp; \cos(\theta) &amp;  \
+0           &amp; 0         &amp; 1 
+\end{bmatrix} = \begin{bmatrix}
+\cos(-\theta) &amp; -\sin(-\theta) &amp; 0 \
+\sin(-\theta) &amp; \cos(-\theta) &amp;  \
+0           &amp; 0         &amp; 1 
+\end{bmatrix}
+$$</p>
+<p>The relation between axes and the position of the point are the same after each of the rotations: After the passive rotation the basis vectors are different and the vector coordinates stay the same whereas after the active rotation the vector coordinates are different but the basis vectors are the same.</p>
+<p>Example for active (left) and passive (right) rotation through $\alpha=25 \degree$:
+<img src="/docs/src/uploads/7eb17510a7f200d4ce89ed337e0a4eda/rotation_active_vs_passive.PNG" alt="active_passive" />
+The relative position of the vector to the axes is the same after each rotation. 
+See also <a href="https://en.wikipedia.org/wiki/Active_and_passive_transformation">active vs passive transformation</a></p>
+<p>However, active and passive are in our case only an <em>interpretation</em> of the rotations that makes sense when looking at the beamline from a global point of view. Globally seen, the local coordinate system of each optical element is rotated and translated differently with respect to a global coordinate system whereas the vectors (the rays) only change by e.g. reflection when interacting with an element.
+Thus, we have coordinate systems for optical elements, that are identical for each element in the sense that the y-axis is the normal and the x-z-plane is the tangent plane of the surface at the origin, and for rays where the center ray is the z-axis and a global system. The transformation between the systems is implemented by rotating and translating the vectors within the same coordinate system.
+$\rightarrow$ In the implementation only the vectors are transformed by active transformations and the axes of the coordinate system stay the same, although in the &quot;real world&quot;, the beams remain unchanged and only the coordinate system is rotated around them.</p>
+</details>
+<p>The following sections describe how to calculate the transformation matrices from beam coordinates to element coordinates and again to (new) beam coordinates based on the given distance and angles in the sequential setup.
+This is relevant for RAY-X if you need to calculate the world coordinates from the user parameters that describe the sequential setup yourself and cannot directly use the world coordinates from the rml file: </p>
+<details><summary>Positioning of elements in sequential setup</summary>
+<p>In the old RAY rays are represented in a beam coordinate system. In that system the main ray always points from the origin towards the z-axis wheras the individual rays have slight deviations in their direction and origin.</p>
+<p>Elements are represented in an element coordinate system.
+The elements are mostly located in the x-z-plane of their coordinate system. The y-axis is the normal in the center of the element (Visualized in the <a href="https://it-ed-git.basisit.de/RAY/RAY/-/wikis/uploads/bdcf4515e03b2fccf462c5f0d76052c3/Paper_Schaefers_RAY_Springer_2007.pdf">documentation</a>).</p>
+<p>In order to calculate the intersection point with the &quot;quad&quot; function, we first need to transfer the incoming rays from beam coordinates to the object coordinates. The relation between these system is defined by two angles $\alpha$ and $\chi$ and a translation by $z_0$. The transformation affects the position and direction of the ray.</p>
+<ol>
+<li>
+<p>the offset $z_0$ describes the distance between the previous element or the source and the current optical element. </p>
+</li>
+<li>
+<p>the main ray should have a specific incidence angle $\alpha$ (angle between main ray and x-z-plane of the optical element). This rotation is counter-clockwise around the x-axis:</p>
+</li>
+</ol>
+<p>$    R_x({\alpha}) = \begin{bmatrix}
+1 &amp; 0 &amp; 0 \
+0 &amp; \cos(\alpha) &amp; -\sin(\alpha) \
+0 &amp; \sin(\alpha) &amp; \cos(\alpha)
+\end{bmatrix}$</p>
+<details><summary>Side note</summary>
+Side note for visualization: An example for this rotation interpreted as an [active](/docs/src/uploads/33a69b81f3f7c491842bcdeda4ca97b7/incidence_angle_active.PNG) and as a [passive](/docs/src/uploads/5ab2555382dc2b2ef10a9864aaee0224/incidence_angle_passive.PNG) rotation of the main ray (z-axis) and a ray $v$ through the grazing incidence angle $\alpha=25°$. The first coordinate system shows the incoming ray in the ray-coordinate system. In the second one the rays/the axes are rotated through $\alpha$ such that the rays lie in the element-coordinate system. In the third image the reflection is calculated. Finally, in the last image, the reflected ray/the axes are rotated to the new ray-coordinate system.
+Since we are using a right-handed coordinate system, the x-axis points into the image and the rotations that appear to be clockwise are actually counter-clockwise around the x-axis.
+</details>
+<ol start="3">
+<li>The second rotation through angle $\chi$ around the z-axis tilts the optical element such that the ray is not reflected upwards ($\chi=0°$) but to the right ($\chi=90°$), downwards ($\chi=180°$) or to the left ($\chi=270°$). This is a clockwise rotation. Thus, we rotate through $-\chi$ when $\chi$ is given.</li>
+</ol>
+<p>After tracing we need to transform the ray back to the beam coordinate system. Therefore we rotate back around $\chi$ and then rotate around the exit angle $\beta$ All these parameters are given as &quot;user&quot; parameters. The following section describes how to calculate beam-element and element-beam transformation matrices.</p>
+</details>
+<details><summary>Calculating transformation matrices between elements in sequential setup</summary>
+<h5 id="beam-to-element"><a class="header" href="#beam-to-element">Beam to Element</a></h5>
+<ol>
+<li>
+<p>Translation by $z_0$ in z direction = distance to preceeding element</p>
+</li>
+<li>
+<p>Rotation by azimuthal angle $\chi$ around z-axis. </p>
+</li>
+</ol>
+<p>$$
+R_z(-\chi) = \begin{bmatrix} \cos(-\chi) &amp; -\sin(-\chi) &amp; 0 \
+\sin(-\chi) &amp; \cos(-\chi) &amp; 0 \
+0 &amp; 0 &amp; 1 \end{bmatrix} =
+\begin{bmatrix} \cos(\chi) &amp; \sin(\chi) &amp; 0 \
+-\sin(\chi) &amp; \cos(\chi) &amp; 0 \
+0 &amp; 0 &amp; 1 \end{bmatrix}
+$$</p>
+<ol start="3">
+<li>Rotation through grazing incidence angle $\alpha$ around x-axis. Sometimes, the normal incidence angle with $90°-\alpha$ is given. Then, it has to be converted to the grazing incidence angle $\alpha$.<br></li>
+</ol>
+<p>$    R_x(\alpha) = \begin{bmatrix} 1 &amp; 0 &amp; 0 \ 
+0 &amp; \cos(\alpha) &amp; -\sin(\alpha) \ 0 &amp; \sin(\alpha) &amp; \cos(\alpha) \end{bmatrix}$</p>
+<p>Putting it all together this is an affine transformation and can be written in homogeneous coordinates as one single matrix:</p>
+<p>$$
+\begin{align*}
+M_{b2e} &amp;= R_{x}(\alpha) R_z(-\chi) T_z(z_0) \
+M_{b2e} &amp;= \begin{bmatrix} 1 &amp; 0 &amp; 0 &amp; 0\ 
+0 &amp; \cos(\alpha) &amp; -\sin(\alpha) &amp; 0 \ 0 &amp; \sin(\alpha) &amp; \cos(\alpha) &amp; 0 \ 0 &amp; 0 &amp; 0 &amp; 1 \end{bmatrix} \cdot \begin{bmatrix} \cos(\chi) &amp; \sin(\chi) &amp; 0 &amp; 0\ -\sin(\chi) &amp; \cos(\chi) &amp; 0 &amp; 0\ 0 &amp; 0 &amp; 1 &amp; 0 \ 0 &amp; 0 &amp; 0 &amp; 1 \end{bmatrix} \cdot \begin{bmatrix} 1 &amp; 0 &amp; 0 &amp; 0 \ 0 &amp; 1 &amp; 0 &amp; 0 \ 0 &amp; 0 &amp; 1 &amp; -z_0 \ 0 &amp; 0 &amp; 0 &amp; 1 \end{bmatrix} \
+&amp;= \begin{bmatrix} \cos(\chi) &amp; \sin(\chi) &amp; 0 &amp; 0 \
+-\sin(\chi)\cos(\alpha) &amp; \cos(\chi)\cos(\alpha) &amp; -\sin(\alpha) &amp; z_0 \sin(\alpha) \
+-\sin(\chi) \sin(\alpha) &amp; \sin(\alpha)\cos(\chi) &amp; \cos(\alpha) &amp; -z_0 \cos(\alpha) \ 0 &amp; 0 &amp; 0 &amp; 1 \end{bmatrix}
+\end{align*}
+$$</p>
+<h5 id="element-to-beam"><a class="header" href="#element-to-beam">Element to Beam</a></h5>
+<p>After the interaction with the element, the reflected ray $x_R$ is transformed back to a beam coordinate system. The rotations around the axes are applied in reverse order.</p>
+<ol>
+<li>Rotation through gracing exit angle $\beta$ around x-axis. We do not need to rotate back through $\alpha$ but keep rotating in the same direction since the new z-axis should point in the direction of the reflected and not of the incoming main ray. E.g. $\beta$ is the same as $\alpha$ for mirrors.<br></li>
+</ol>
+<p>$$
+R_x(\beta) = \begin{bmatrix} 1 &amp; 0 &amp; 0 \ 
+0 &amp; \cos(\beta) &amp; -\sin(\beta) \ 0 &amp; \sin(\beta) &amp; \cos(\beta) \end{bmatrix}
+$$</p>
+<ol start="2">
+<li>Rotation back through $\chi$.<br></li>
+</ol>
+<p>$$
+R_z(\chi) = R_z^{-1}(-\chi) = \begin{bmatrix} \cos(\chi) &amp; -\sin(\chi) &amp; 0 \
+\sin(\chi) &amp; \cos(\chi) &amp; 0 \
+0 &amp; 0 &amp; 1 \end{bmatrix}
+$$</p>
+<p>In homogeneous coordinates:</p>
+<p>$$
+\begin{align*}
+M_{e2b} &amp;= R_z(\chi)R_{x}(\beta) \
+M_{e2b} &amp;= \begin{bmatrix} \cos(\chi) &amp; -\sin(\chi) &amp; 0 &amp; 0\
+\sin(\chi) &amp; \cos(\chi) &amp; 0 &amp; 0\
+0 &amp; 0 &amp; 1 &amp; 0 \ 0 &amp; 0 &amp; 0 &amp; 1 \end{bmatrix} \cdot  \begin{bmatrix} 1 &amp; 0 &amp; 0 &amp; 0\ 
+0 &amp; \cos(\beta) &amp; -\sin(\beta) &amp; 0 \ 0 &amp; \sin(\beta) &amp; \cos(\beta) &amp; 0 \ 0 &amp; 0 &amp; 0 &amp; 1\end{bmatrix}\
+&amp;= \begin{bmatrix} \cos(\chi) &amp; -\sin(\chi) \cos(\beta) &amp; \sin(\chi)\sin(\beta) &amp; 0 \
+\sin(\chi) &amp; \cos(\chi)\cos(\beta) &amp; -\cos(\chi)\sin(\beta) &amp; 0 \
+0 &amp; \sin(\beta) &amp; \cos(\beta) &amp; 0 \ 0 &amp; 0 &amp; 0 &amp; 1 \end{bmatrix}
+\end{align*}
+$$</p>
+<p>(Since there is no translation a 3x3 matrix would suffice)</p>
+<h3 id="misalignment"><a class="header" href="#misalignment">Misalignment</a></h3>
+<p>Misalignment is used when the optical element does not lie exactly where it should after applying the beam to element matrix. Therefore some rotation or translation might be necessary before the intersection point can be calculated.</p>
+<p>The misalignment transformation matrix $M_{mis}$ is simply derived from the user parameters $d_x$, $d_y$, $d_z$, $d_{\phi}$, $d_{\psi}$, $d_{\chi}$. It can be calculated by spliting into a transformation matrix (from $d_x$, $d_y$, $d_z$) and multiplying with a rotation matrix (from $d_{\phi}$, $-d_{\psi}$, $d_{\chi}$):</p>
+<p>$$
+\begin{align*}
+M_{mis} &amp;= T_{x,y,z} R_{\phi, -\psi, \chi} \
+&amp;= \begin{bmatrix} 1 &amp; 0 &amp; 0 &amp; -d_x\
+0 &amp; 1 &amp; 0 &amp; -d_y\
+0 &amp; 0 &amp; 1 &amp; -d_z \ 0 &amp; 0 &amp; 0 &amp; 1 \end{bmatrix} \cdot R^x_{-\psi} \cdot R^y_{\phi} \cdot R^z_{\chi}
+\end{align*} 
+$$</p>
+<p>where e.g. $R^x_{\psi}$ is the 4x4 homogeneous rotation matrix through $\psi$ around the x-axis.</p>
+<p>The inverse misalignment matrix is then calculated as follows:</p>
+<p>$$
+\begin{align*}
+M_{mis}^{-1} &amp;= R_{-\psi, \phi, \chi}^{-1} \cdot T_{x,y,z}^{-1}\
+&amp;= (R^x_{-\psi} \cdot R^y_{\phi} \cdot R^z_{\chi}) ^{T} \cdot 
+\begin{bmatrix}
+1 &amp; 0 &amp; 0 &amp; d_x \
+0 &amp; 1 &amp; 0 &amp; d_y \
+0 &amp; 0 &amp; 1 &amp; d_z \ 
+0 &amp; 0 &amp; 0 &amp; 1 
+\end{bmatrix} 
+\end{align*}
+$$</p>
+<p>Since rotation matrices are orthogonal, the inverse of $(R^x_{-\psi} R^y_{\phi} R^z_{\chi})$ is the same as the transpose. The inverse of the translation matrix is the same but with negative offsets.</p>
+<p>$M_{mis}$, $M_{mis}^{-1}$ are multiplied with $M_{b/g2e}$ and $M_{e2g/b}$, respectively, to form the final transformation matrices which could be given to the shader if we would still use the sequential approach in RAY-X. However, we use a global coordinate system instead of the beam coordinate system but don't worry you didn't just read all of that for nothing, it will be important in the derivation of the transformation from global to element coordinates and back.</p>
+</details>
+<p>The next section describes how to replace the beam coordinate system that is used in the sequential approach with the global coordinate system and how to calculate the position and orientation.</p>
+<details><summary>Sequential to world coordinates</summary>
+<p>As explained in the previous sections, there is no global coordinate system in the sequential implementation but instead rays are transformed from beam coordinate system to element coordinate system and back to a different beam coordinate system such that the z-axis of the beam coordinate system always follows the main ray, which means that the main ray with $pos=(0,0,0)$, $dir=(0,0,1)$ in beam coordinates is always the same after each interaction with an optical element.</p>
+<p>In a global coordinate system this is different. The origin of the system is the (first) source. When the main ray hits the first element, it is transformed into the element's coordinate system, traced (e.g. reflected) and transformed back into the global coordinate system. Then it does no longer have the values $pos=(0,0,0)$ and $dir=(0,0,1)$. To achieve this for the first element (i=1) in the beamline, we can still use $M_{b2e}$ that we defined previously $(M_{g2e}^{-1} = M_{b2e}^{-1})$ since for the first element the global coordinate system is the same as the beam coordinate system of the incoming rays (bc the source is in $(0,0,0)$ which is the origin of both the global coord system and the initial beam coord. system). However, we need a different element to global coordinate system transformation for this elemet $M_{g2e}^{-1} \neq M_{b2e}^1$ and of course also for all following elements. Moreover, for all following elements we also need a different $M_{g2e}^i \neq M_{b2e}^i$ for $i&gt;1$.</p>
+<h3 id="transformation-matrices-from-position-and-orientation"><a class="header" href="#transformation-matrices-from-position-and-orientation">Transformation matrices from position and orientation</a></h3>
+<p>global coordinates are sometimes given by the user directly via e.g. an rml file, which stores the global orientation as a 3x3 matrix and the position as a 3 element vector. Expanding both to homogeneous 4x4 rotation/translation matrices makes it possible to calculate $M_{g2e}$ and $M_{e2g}$ by multiplying them.
+For the case that the beamline was still build sequentially, it was decided to first build the global position and orientation from $\alpha$, $\beta$, $\chi$, the distance $z_0$ and the misalignment and then derive the matrices $M_{g2e}$ and $M_{e2g}$  in the same way.</p>
+<p>The following calculations can be used for all optical elements. For the ellipsoid, however, the misalignment can be defined in the coordinate system of the mirror or of the curvation. The usual misalignment is in the coordinate system of the mirror. The coordinate system of the curvation differs by a rotation through the tangent angle $\theta$ around the x-axis. This angle depends on the shape of the ellipsoid. Depending on the coordinate system, we add the rotation $T_x(\theta)$ (in red), for all other elements this is irrelevant so $\theta = 0$.</p>
+<p>As mentioned before, in the case that the element is the first in the beamline, it is simply placed at a certain distance on the z-axis. Therefore, the position (pos) is, in homogeneous coordinates:</p>
+<p>$$
+pos^0 = \begin{bmatrix} 0 \ 0 \ z_0^0 \ 1 \end{bmatrix} + or^0 \cdot \color{red} R_x^0(\theta) \color{black} \cdot \begin{bmatrix} d_x^0 \ d_y^0 \ d_z^0 \ 1 \end{bmatrix}
+$$</p>
+<p>where or is the orientation of the element and $d_x$, $d_y$, $d_z$ are the positional misalignment.
+The orientation of the first element is calculated as follow:</p>
+<p>$$
+or^0 = R_x^0(\alpha) R_z^0(-\chi) \cdot \color{red} R_x^0(\theta) \color{black} \cdot R_{\phi, -\psi, \chi}^0 \cdot \color{red} R_x^0(\theta)^T \color{black}
+$$</p>
+<p>where $R_{\phi -\psi \chi}$ contains the orientational misalignment and $R_x(\alpha) R_z(-\chi)$ is the rotational part of $M_{b2e}$ (without the translation by $z_0$ since the distance is not part of the orientation but of the position)</p>
+<p>When the element is not the first in the beamline, we need in addition to the ususal parameters of this element ($\alpha$, $\beta$, $\chi$, the distance $z_0$ and the misalignment) also the global position and orientation and the $M_{e2b}$ matrix of the previous element. Unfortunately, we also have to remove the misalignment from the global position of the previous element (equation 1), then we can add the distance from the previous to new element to the position of the previous element following the direction of the outgoing ray (2). Finally, we can add the positional misalignment of element i to the position (3).</p>
+<p>$$
+\begin{align}
+pos^{(i-1)<em>} &amp;= pos^{i-1} - or^{i-1} \cdot \color{red} R_x^{i-1}(\theta) \color{black} \cdot \begin{bmatrix} d_x^{i-1} \ d_y^{i-1} \ d_z^{i-1} \ 1 \end{bmatrix} \
+pos^i &amp;= pos^{(i-1)</em>} + or^{i-1} \cdot M_{e2b}^{i-1} \cdot \begin{bmatrix} 0 \ 0 \ z_0^i \ 1 \end{bmatrix} \
+pos^i &amp;= pos^i + or^{i} \cdot \color{red} R_x^{i}(\theta) \color{black} \cdot \begin{bmatrix} d_x^i \ d_y^i \ d_z^i \ 1 \end{bmatrix}
+\end{align}
+$$</p>
+<p>The calculation of the orientation of the ith element is a bit simpler. The global orientation of element i is the global orientation of the previous element $(or^{i-1})$ without the rotational misalignment (1) multiplied with the rotation of the new element coordinate system with respect to the previous element coordinate system $(M_{e2b}, \text{eq 2})$ multiplied with the orientation of the new element in its own element coordinate system (which is calculated in the same way as for the first element: local orientation $\cdot$ misalignment, eq. 3):</p>
+<p>$$
+\begin{align}
+or^{(i-1)<em>} &amp;= or^{i-1} \cdot \color{red} R_x^{i-1}(\theta)^T \color{black} \cdot (R_{\phi, -\psi, \chi}^{i-1})^{T} \cdot \color{red} R_x^{i-1}(\theta) \color{black}\
+or^i &amp;= or^{(i-1)</em>} \cdot M_{e2b}^{i-1} \
+or^i &amp;= or^i \cdot (R_x^i(\alpha) R_z^i(-\chi) \cdot \color{red} R_x^i(\theta) \color{black} \cdot R_{\phi, -\psi, \chi}^i \color{red} R_x^i(\theta)^T \color{black})
+\end{align}
+$$</p>
+<p>These calculations are done in WorldUserParams.cpp. They have been tested but still there might be some mistake in there, so feel free to question the calculations if something is not working.</p>
+</details>
+<p>Once you have the global position and orientation, you can derive the Transformation matrices by expanding the position p to a homogeneous translation matrix and the orientation to a homogeneous rotation matrix:</p>
+<p>$M_{g2e} = 
+\begin{bmatrix} 
+1 &amp; 0 &amp; 0 &amp; -p_x \
+0 &amp; 1 &amp; 0 &amp; -p_y \
+0 &amp; 0 &amp; 1 &amp; -p_z \
+0 &amp; 0 &amp; 0 &amp; 1
+\end{bmatrix} \cdot or$
+$M_{e2g} = M_{g2e}^{-1} = or^T \cdot \begin{bmatrix} 
+1 &amp; 0 &amp; 0 &amp; p_x \
+0 &amp; 1 &amp; 0 &amp; p_y \
+0 &amp; 0 &amp; 1 &amp; p_z \
+0 &amp; 0 &amp; 0 &amp; 1
+\end{bmatrix}$</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../Developer/PRNGs-on-the-GPU.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                            <a rel="next" href="../Developer/Quad(ric)-function.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../Developer/PRNGs-on-the-GPU.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                    <a rel="next" href="../Developer/Quad(ric)-function.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        <script src="../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../searcher.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+    </body>
+</html>

@@ -1,0 +1,984 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>RAY-X Wiki</title>
+        <meta name="robots" content="noindex" />
+        <!-- Custom HTML head -->
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="index.html">Introduction</a></li><li class="chapter-item expanded "><a href="Developer/Developer.html"><strong aria-hidden="true">1.</strong> Developer Area</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="Developer/How-to-Build.html"><strong aria-hidden="true">1.1.</strong> How to Build</a></li><li class="chapter-item expanded "><a href="Developer/Style-Guide-for-Programming-in-Ray.html"><strong aria-hidden="true">1.2.</strong> Style Guide for Programming in RAY</a></li><li class="chapter-item expanded "><a href="Developer/Testing.html"><strong aria-hidden="true">1.3.</strong> Testing</a></li><li class="chapter-item expanded "><a href="Developer/How-to-use-our-formatter.html"><strong aria-hidden="true">1.4.</strong> How to use our Formatter</a></li><li class="chapter-item expanded "><a href="Developer/How-to-use-Doxygen.html"><strong aria-hidden="true">1.5.</strong> How to use Doxygen</a></li><li class="chapter-item expanded "><a href="Developer/PRNGs-on-the-GPU.html"><strong aria-hidden="true">1.6.</strong> PRNGs on the GPU</a></li><li class="chapter-item expanded "><a href="Developer/Transformation-between-coordinate-systems.html"><strong aria-hidden="true">1.7.</strong> Transformation between coordinate systems</a></li><li class="chapter-item expanded "><a href="Developer/Quad(ric)-function.html"><strong aria-hidden="true">1.8.</strong> Quad(ric) Function</a></li><li class="chapter-item expanded "><a href="Developer/Approximation-of-ray-object-intersection-in-the-case-of-quadric-surfaces.html"><strong aria-hidden="true">1.9.</strong> Approximation of ray object intersection in the case of quadric surfaces</a></li><li class="chapter-item expanded "><a href="Developer/Efficiency.html"><strong aria-hidden="true">1.10.</strong> Efficiency calculations</a></li><li class="chapter-item expanded "><a href="Developer/Plane-Mirror.html"><strong aria-hidden="true">1.11.</strong> Plane Mirror</a></li><li class="chapter-item expanded "><a href="Developer/RZP.html"><strong aria-hidden="true">1.12.</strong> Reflection Zone Plate (RZP)</a></li><li class="chapter-item expanded "><a href="Developer/VSCode-recommended-Extensions.html"><strong aria-hidden="true">1.13.</strong> VSCode recommended Extensions</a></li><li class="chapter-item expanded "><a href="Developer/Debugging.html"><strong aria-hidden="true">1.14.</strong> Debugging</a></li></ol></li><li class="chapter-item expanded "><a href="APIUser/APIUser.html"><strong aria-hidden="true">2.</strong> API User Area</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="APIUser/How-to-use-RayCore.html"><strong aria-hidden="true">2.1.</strong> How to use RayCore</a></li><li class="chapter-item expanded "><a href="APIUser/RAYX-Profiling.html"><strong aria-hidden="true">2.2.</strong> RAY-X Profiling</a></li><li class="chapter-item expanded "><a href="APIUser/Object-Coordinate-System.html"><strong aria-hidden="true">2.3.</strong> Object Coordinate System</a></li><li class="chapter-item expanded "><a href="APIUser/User-vs-Model-Parameter.html"><strong aria-hidden="true">2.4.</strong> User vs Model Parameter</a></li><li class="chapter-item expanded "><a href="APIUser/Ray-generation.html"><strong aria-hidden="true">2.5.</strong> Ray generation</a></li><li class="chapter-item expanded "><a href="APIUser/VulkanTracer.html"><strong aria-hidden="true">2.6.</strong> Vulkan Tracer</a></li></ol></li><li class="chapter-item expanded "><a href="AppUser/AppUser.html"><strong aria-hidden="true">3.</strong> App User Area</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="AppUser/How-to-use-the-TerminalApp.html"><strong aria-hidden="true">3.1.</strong> How to use TerminalApp</a></li><li class="chapter-item expanded "><a href="AppUser/Literature.html"><strong aria-hidden="true">3.2.</strong> Literature</a></li></ol></li><li class="chapter-item expanded "><a href="Link-Dump.html"><strong aria-hidden="true">4.</strong> Link Dump</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">RAY-X Wiki</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="ray-x-a-synchrotron-radiation-tracer"><a class="header" href="#ray-x-a-synchrotron-radiation-tracer">RAY-X: A synchrotron radiation tracer</a></h1>
+<img src="https://user-images.githubusercontent.com/13185253/167402648-788eee6a-2ba4-466a-8a0a-62e59663e957.png" width="400" height="400"/>
+<p>RAY-X is a simulation and design tool for beamlines in energy storage rings. It traces synchrotron radiation through a series of mirrors, gratings and more and gives the user helpful insights, how a given beamline performs. </p>
+<p>This software is the predecessor of <a href="https://www.helmholtz-berlin.de/forschung/oe/wi/optik-strahlrohre/arbeitsgebiete/ray_en.html">RAY-UI</a> and aims to reengineer a valuable tool for physicists, engineers and others working on beamlines for electron storage rings.</p>
+<p>For the moment we only support a cli application for the RayCore-library, which will enable you to trace beamlines created through RAY-UI efficiently. The main reason for the faster simulations is that we make use of dedicated GPUs.</p>
+<p>This wiki is divided into three main parts. They are designed for App Users, API Users, and Developer. The areas are not exclusive to these audiences and an API User might need to look at some pages in the App User Area and a Developer might find interesting info in all three parts.</p>
+<ul>
+<li><a href="./AppUser/AppUser.html">App User Area</a></li>
+<li><a href="./APIUser/APIUser.html">API User Area</a></li>
+<li><a href="./Developer/Developer.html">Developer Area</a></li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="developer-area"><a class="header" href="#developer-area">Developer Area</a></h1>
+<p>In this section we will cover parts, which are relevant to developers
+for RAY-X or those who use our API for their own software. Those topics
+are:</p>
+<ul>
+<li>Rules for contributions</li>
+<li>Build Process</li>
+<li>Interfaces</li>
+<li>Documentation for RAY-X</li>
+<li>Testing</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="how-to-build"><a class="header" href="#how-to-build">How to Build</a></h1>
+<p>For building the project and running the project, we recommend to use <a href="https://code.visualstudio.com/">Visual Studio Code</a> as your IDE with these extensions: C/C++ and CMake Tools. You can use any IDE you like, but the VSCode extensions make the building process very easy.</p>
+<p>Clone the git repository with:
+<code>git clone --recurse-submodules git@github.com:hz-b/RAY-X.git -b development</code></p>
+<p>to get the dev branch and to make sure, you also clone all of it's submodules.</p>
+<h2 id="on-windows"><a class="header" href="#on-windows">On Windows</a></h2>
+<ul>
+<li>Install <a href="https://cmake.org/download/">CMake</a></li>
+<li>Install <a href="https://vulkan.lunarg.com/">Vulkan</a> for Windows</li>
+<li>Install <a href="https://www.hdfgroup.org/downloads/hdf5/">HDF5</a> library </li>
+<li>Open the project in VSCode, where you will be asked to select a build kit (gcc, etc.)</li>
+<li>Also allow the CMake Extension to configure the project</li>
+<li>Then you can click build in the bottom panel</li>
+</ul>
+<h2 id="on-linux"><a class="header" href="#on-linux">On Linux</a></h2>
+<ul>
+<li>Make sure you have cmake, gcc, gdb and make installed and on the latest version</li>
+<li>Download Vulkan SDK from <a href="https://vulkan.lunarg.com/sdk/home">https://vulkan.lunarg.com/sdk/home</a></li>
+<li>run <code>source setup-env.sh</code> in terminal in the downloaded folder and run <code>vkcube</code> to test it (!now only in this specific terminal available!)</li>
+<li>add: <code>source &quot;path/to/dir/setup-env.sh&quot; </code>to <code>~/.profile</code> file to have vulkan available in any terminal/IDE... (e.g: <code>source &quot;$HOME/Downloads/1.2.154.0/setup-env.sh&quot;</code>)</li>
+<li>test again with vkcube in any terminal/IDE</li>
+<li>see also <a href="https://vulkan.lunarg.com/doc/sdk/1.2.182.0/linux/getting_started.html">https://vulkan.lunarg.com/doc/sdk/1.2.182.0/linux/getting_started.html</a></li>
+<li>in usr/bin/ <code>ln -s &quot;/path/to/vulkansdk/x86_64/bin/glslc&quot; glslc</code></li>
+<li>Starting from Jan 2022, the project also uses <a href="https://github.com/BlueBrain/HighFive">libhdf5</a>. Make sure that you have the correct libraries <em>(Ubuntu and debian-based Distros)</em> :  <code>apt update &amp;&amp; apt -y install libblas-dev liblapack-dev libhdf5-dev</code></li>
+<li>Make sure that the libraries are installed at <code>/usr/include/hdf5/serial</code> and <code>/usr/lib/x86_64-linux-gnu/hdf5/serial</code></li>
+</ul>
+<h2 id="fedora"><a class="header" href="#fedora">Fedora</a></h2>
+<pre><code>sudo dnf install cmake gcc gdb vulkan vulkan-tools vulkan-validation-layers hdf5-devel
+</code></pre>
+<h2 id="building-independent-of-ide"><a class="header" href="#building-independent-of-ide">Building independent of IDE</a></h2>
+<p>In case you decide against using VSCode you can setup your build system with the command:</p>
+<p><code>cmake --no-warn-unused-cli -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -DCMAKE_BUILD_TYPE:STRING=Debug -B ./build -G Ninja</code></p>
+<p>and then build with</p>
+<p><code>cmake --build ./build --config Debug --target all -j 10 --</code></p>
+<p>or for release:
+<code>cmake --build ./build --config Release --target all -j 10 --</code> for setup, and
+<code>cmake --no-warn-unused-cli -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -DCMAKE_BUILD_TYPE:STRING=Release -B ./build -G Ninja</code> for building.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="style-guide"><a class="header" href="#style-guide">Style Guide</a></h1>
+<p>Here you can find a collection of rules for our code base, which developed over the projects lifetime. There are here to make it easier for others on the team, to read your code. Please read them carefully.</p>
+<h2 id="general"><a class="header" href="#general">General</a></h2>
+<p>Keep collective ownership of the code in mind, when writing it (write code to be read by your team mates, not the compiler). </p>
+<p>So keep it stupid simple. In most places it is not necessary or sensible to optimise the runtime of code to the last CPU cycle. Often the compiler does it better than the programmer anyways.</p>
+<h2 id="includes"><a class="header" href="#includes">Includes</a></h2>
+<p>As an easy step towards readability we divide includes in the following way: </p>
+<p><code>#include &quot;internalHeader.h&quot;</code></p>
+<p><code>#include &lt;externalHeader.h&gt;</code></p>
+<p>Where internal headers are the ones we wrote ourselves and external headers are from dependencies we included into our project.</p>
+<h2 id="comments"><a class="header" href="#comments">Comments</a></h2>
+<p>Write comments often and as precise as possible. Comments should contain what you would say to a newcomer to the project, because that is most likely the person that reads/needs the comments.</p>
+<h3 id="doxygen"><a class="header" href="#doxygen">Doxygen</a></h3>
+<pre><code class="language-c++">/**
+* a desctription (should be helpful)
+* @param value1 	what the parameter value1 does
+* @param value2 	what the parameter value2 does
+* @see related function
+* @return what the function returns
+*/
+</code></pre>
+<p>This is how a comment before a function should look. It contains a brief description of it and of the parameters and return values of it. It also points to related functions, if there are any.</p>
+<h2 id="naming-scheme"><a class="header" href="#naming-scheme">Naming scheme</a></h2>
+<p>As longer names can contain more than one word, it can help to have a visual divider. In the case of Ray-UI we use &quot;camelCase&quot; and &quot;PascalCase&quot;. When to use what, will be in the next section. </p>
+<p>The upper case letter indicates a new word and thus improves readability. Every name should be able to stand alone and describe the object, function or variable. Something like &quot;int v;&quot; does not achieve this. This also means only using common abbreviations, like &quot;val&quot; for &quot;value&quot; or &quot;dx&quot; for a distance over x.</p>
+<p>Should the name get too long or cryptic, write a comment to clarify what you mean with the name you chose for this variable.</p>
+<h3 id="boolean"><a class="header" href="#boolean">Boolean</a></h3>
+<p>All Boolean values should begin with is/can/has/etc. when possible.</p>
+<h2 id="classes-function-and-variables"><a class="header" href="#classes-function-and-variables">Classes, Function and Variables</a></h2>
+<p>Class and object names are written in &quot;PascalCase&quot;. Functions and Variables are written in &quot;camelCase&quot;.</p>
+<p>e.g.:</p>
+<ul>
+<li>&quot;ClassA&quot;</li>
+<li>&quot;functionB(int valueC, bool isD)&quot;</li>
+</ul>
+<h2 id="member"><a class="header" href="#member">Member</a></h2>
+<p>Member objects and variables of a class are indicated by an &quot;m_&quot;, e.g. : </p>
+<ul>
+<li>m_MemberObject </li>
+<li>m_memberVariable</li>
+</ul>
+<h2 id="static"><a class="header" href="#static">Static</a></h2>
+<p>A static variable or object is indicated by an &quot;s_&quot;, e.g. :</p>
+<ul>
+<li>s_StaticObject</li>
+<li>s_staticVariable</li>
+</ul>
+<h2 id="const-correctness"><a class="header" href="#const-correctness">Const Correctness</a></h2>
+<p>Const correctness means using the keyword <code>const</code>, to avoid const objects from getting mutated.</p>
+<ol>
+<li><code>void f1(const std::string&amp; s);     </code> <em>// Pass by reference-to-<code>const</code></em></li>
+<li><code>void f2(const std::string* sptr);  </code> <em>// Pass by pointer-to-<code>const</code></em></li>
+<li><code>void f3(std::string s);            </code> <em>// Pass by value</em></li>
+</ol>
+<p>In the first case a reference is passed to the function with the keyword const. This means the function won't change the value of the object or variable. The same can be done for pointers. Another option is to pass by value. This creates a copy of an object or variable, so the original isn't changed even if the function changes the copy. </p>
+<p>Add const keywords as early as possible. Const correctness can create a snow ball effect and is easier implemented from the beginning. </p>
+<p>Further reading can and should be done here: https://isocpp.org/wiki/faq/const-correctness</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="testing-in-ray-x"><a class="header" href="#testing-in-ray-x">Testing in RAY-X</a></h1>
+<p>There are several kinds of tests: </p>
+<h2 id="testing-c-code"><a class="header" href="#testing-c-code">Testing C++ Code</a></h2>
+<p>testing only c++ code and not using the shader, to check if parameters of optical elements are calculated correctly</p>
+<p>check especially if the values that are derived from given user parameters and given to the shader are correct. These include the surface Parameters, the object parameters, the element parameters and the world to element and element to world coordinate transformation matrices, each of which are stored in an 16 element value array. </p>
+<h2 id="testing-shader-code-test_shadercpp"><a class="header" href="#testing-shader-code-test_shadercpp">Testing Shader Code (test_shader.cpp)</a></h2>
+<p>The testing suite &quot;Tracer&quot; contains unit tests that check if the individual functions in the shader code are behaving as expected. As the functions that are tested are on the shader and in our current framework the only values that can be moved to the shader are mainly the Ray and Optical Element buffers, we cannot just call the functions with the required input values. 
+Instead we first store the test values in Rays on the C++ side and retrieve them from the Rays on the shader side. Then the test can be executed on the shader and the results are stored again in the Ray buffer (outputRays). Back on the C++ side this can then be compared with the expected values. </p>
+<p>Example: Testing the refraction function <br>
+The refraction function on the shader calculates the direction and weight of the refracted ray from the direction of the incoming ray, the normal at the intersection and the line density. The input to the test should therefore be:</p>
+<ul>
+<li>dvec3 <strong>direction</strong></li>
+<li>dvec3 <strong>normal</strong></li>
+<li>double <strong>lineDensity</strong></li>
+<li>double <strong>weight</strong></li>
+</ul>
+<p>The output and therefore the values to verify are:</p>
+<ul>
+<li>dvec3 <strong>direction_out</strong></li>
+<li>double <strong>weight_out</strong></li>
+</ul>
+<p>after the refraction</p>
+<p>To move the test data to the shader and retrieve the results after applying the function we use the Ray buffer. Each test case is encoded in one Ray and we can add as many test cases as we want to the ray buffer. A ray consists of:</p>
+<ul>
+<li>dvec3 <strong>position</strong></li>
+<li>dvec3 <strong>direction</strong></li>
+<li>double <strong>energy</strong></li>
+<li>double <strong>weight</strong></li>
+<li>dvec4 <strong>stokes</strong></li>
+<li>double <strong>order</strong></li>
+<li>double <strong>pathLength</strong></li>
+<li>double <strong>lastElement</strong></li>
+<li>double <strong>extra Parameter</strong></li>
+</ul>
+<p>We can for example encode the test values for the refraction test as:</p>
+<ul>
+<li>dvec <strong>position</strong> $\leftarrow$ <strong>normal</strong></li>
+<li>dvec <strong>direction</strong> $\leftarrow$ <strong>direction</strong></li>
+<li>double <strong>energy</strong> $\leftarrow$ <strong>lineDensity</strong></li>
+<li>double <strong>weight</strong> $\leftarrow$ <strong>weight</strong></li>
+<li>others $\leftarrow$ 0</li>
+</ul>
+<p>For this, we can use the function &quot;addTestSetting&quot; that receives the test values in the correct order, creates a ray and adds it to a given ray vector which is in this case the one that will be transferred to the shader (std::vector&lt;RAYX::Ray&gt; <strong>testValues</strong>).
+To be able to verify the result that we will later retrieve from the shader, we need to store also the expected direction_out and weight_out. To make the comparison later easier we also store these in a Ray that corresponds to the test case and add it to std::vector&lt;RAYX::Ray&gt; <strong>correct</strong> using for example the following encoding:</p>
+<ul>
+<li>dvec <strong>position</strong> $\leftarrow$ (0,0,0)</li>
+<li>dvec <strong>direction</strong> $\leftarrow$ <strong>direction_expected</strong></li>
+<li>double <strong>energy</strong> $\leftarrow$ 0</li>
+<li>double <strong>weight</strong> $\leftarrow$ <strong>weight_expected</strong></li>
+<li>others $\leftarrow$ 0</li>
+</ul>
+<p>Now we have in both vectors one Ray for each test case, where <strong>testValues</strong> contains the values that we move to the shader and <strong>correct</strong> contains those that we expect to get back. Now, we can move <strong>testValues</strong> as the Ray buffer to the shader.</p>
+<p>Then, on the shader side we need to make sure that the test values are &quot;unpacked&quot; correctly from the ray buffer. We can execute the function and store the updated direction and weight in the output ray buffer in the same format as they are stored in <strong>correct</strong> on the C++ side which is:</p>
+<ul>
+<li>dvec <strong>position</strong> $\leftarrow$ (0,0,0)</li>
+<li>dvec <strong>direction</strong> $\leftarrow$ <strong>direction_out</strong></li>
+<li>double <strong>energy</strong> $\leftarrow$ 0</li>
+<li>double <strong>weight</strong> $\leftarrow$ <strong>weight_out</strong></li>
+<li>others $\leftarrow$ 0</li>
+</ul>
+<p>These Rays are returned to the C++ test code as <strong>outputRays</strong> where the can be compared with compareFromCorrect(correct, outputRays, tolerance); for a given tolerance.</p>
+<p>For other functions, like the approximation of sinus for example, we do not necessarily need the <strong>correct</strong> vector but we can simply apply the function sin() to the <strong>testValues</strong> and compare them directly with: <br>
+auto sinfun = fn&lt;double, double&gt;([](double x) { return sin(x); }); <br>
+compareFromFunction(sinfun, testValues, outputRays, tolerance);</p>
+<p>If a test has more test values than a ray has paramters, one could use the opticalElement buffer and add e.g. one opticalElement for each test case.</p>
+<p>To make things even more complicated, we also need to have an id for each test to distinguish on the shader side which test is run and how the rays should be interpreted. The id is set in the surfaceParams of an optical Element. Because we want to have only one main function on the shader we also have to distinguish between a test case and a normal run of a beamline. This is achieved by setting the id to 0 if it is a beamline and to the test id otherwise (there is no test with id=0).</p>
+<h2 id="testing-beamlines-test_shadercpp"><a class="header" href="#testing-beamlines-test_shadercpp">Testing Beamlines (test_shader.cpp)</a></h2>
+<p>Tests from the testing suite opticalElements read a beamline from a given rml file, run the tracer on it and writes the returned rays to a csv file with the same name as the rml file. 
+If the beamlines give deterministic results, we can compare them with the output of RAY-UI using the test.py file. Therefore it is necessary to export the traced data from the same beamline traced in RAY-UI. Moreover, the beamline needs to end with an image plane because of the different coordinate systems that are used (Ray coodinates vs world coordinates).</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="how-to-use-our-formatter"><a class="header" href="#how-to-use-our-formatter">How to use our formatter</a></h1>
+<p>In Ray-X we decided on using a formatter to keep our code clean and organized. Here you can read how to use it.</p>
+<h2 id="general-1"><a class="header" href="#general-1">General</a></h2>
+<p>We use clang-format for this purpose. The style is defined in the .clang-format file in the project root. As you can see in the file, our style is based on the Google C++ style. Remember: the formatter just completes our style guide and doesn't replace it.</p>
+<h2 id="visual-studio-code"><a class="header" href="#visual-studio-code">Visual Studio Code</a></h2>
+<p>If you are using Visual Studio Code you can use the C/C++ extension for formatting. It includes the clang-format binary so you just need to change a few settings to configure it correctly. You can see the changes (highlighted in red) in the following screenshots:</p>
+<p><img src="Developer//docs/src/uploads/2c63612ff9801ed26e63223f2aa161e2/image.png" alt="image" /></p>
+<p>The following settings control, when the formatting should happen. This is up to you as long as the commited code is formatted.</p>
+<p><img src="Developer//docs/src/uploads/f29aa032e92a97edc3f1c16e506afe30/image.png" alt="image" /></p>
+<h3 id="using-format-all-files-in-workspace"><a class="header" href="#using-format-all-files-in-workspace">Using <em>Format All Files in Workspace</em></a></h3>
+<p>To format all the workspace at once, you can use the following <a href="https://marketplace.visualstudio.com/items?itemName=alexr00.formatallfilesinworkspace">Visual Studio Code's Extension</a>.</p>
+<p>In your settings .json file, add the lines to go through the correct directories and only format C++ files:</p>
+<pre><code>    &quot;formatAll.includeFileExtensions&quot;: [
+        &quot;.cpp&quot;,
+        &quot;.h&quot;
+    ],
+    &quot;formatAll.excludeFolders&quot;: [
+        &quot;build&quot;,
+        &quot;Extern&quot;,
+    ], 
+</code></pre>
+<p><em>WARNING</em>: Using this extension can take up some time, you'll see all targeted files opening in new tabs. Grab a cup of coffee and let it do the trick :)</p>
+<h2 id="vim-integration"><a class="header" href="#vim-integration">Vim Integration</a></h2>
+<p><a href="https://clang.llvm.org/docs/ClangFormat.html#vim-integration">ClangFormat — Clang 13 documentation (llvm.org)</a></p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="how-to-use-doxygen"><a class="header" href="#how-to-use-doxygen">How to use Doxygen</a></h1>
+<h2 id="prerequisites"><a class="header" href="#prerequisites">Prerequisites</a></h2>
+<ul>
+<li>Doxygen: http://www.doxygen.nl/download.html#srcbin</li>
+<li>(GraphViz: https://graphviz.gitlab.io/download/) &lt;-- at the moment not needed</li>
+</ul>
+<p>Note GraphViz installation: On windows you can install graphviz via MSYS2 since you might already have it to build the project. Simply call: pacman -S mingw-w64-x86_64-graphviz in the MSYS2 commandline window. The DOT_PATH muust then be set to {MSYS2}/mingw64/bin</p>
+<h2 id="configuration"><a class="header" href="#configuration">Configuration</a></h2>
+<ol>
+<li>Open the Doxyfile in RayCore/doc/ with the Doxywizard</li>
+<li>Change the DOT_PATH in &quot;Expert-&gt;Dot&quot; to the bin-directory in your GraphViz-Folder (where you installed it)</li>
+<li>Click on the &quot;Run&quot;-tab and click &quot;Run doxygen&quot; (this will take a while, depending on your cpu performance)</li>
+<li>After completion open the Index.html or click &quot;Show HTML output&quot; in the Doxywizard</li>
+</ol>
+<h2 id="class-diagram"><a class="header" href="#class-diagram">Class Diagram</a></h2>
+<p>A generated Class Diagram can be found under &quot;Classes-&gt;Class Hierarchy&quot;</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="pseudo-random-number-generators-prngs-on-the-gpu"><a class="header" href="#pseudo-random-number-generators-prngs-on-the-gpu">Pseudo Random Number Generators (PRNGs) on the GPU</a></h1>
+<p>For Ray-Rayworked we looked a little to to find a good and performant pseudo random number generator. We decided to use Squares RNG, which is counter based and utilizes a version of the Middle Square Weyl Sequence. We tested the method with the TestU01 bigcrush test with different seeds and it passed all of them.</p>
+<p><a href="https://arxiv.org/pdf/2004.06278.pdf">Squares: A Fast Counter-Based RNG</a></p>
+<p><a href="https://www.iro.umontreal.ca/%7Elecuyer/myftp/papers/testu01.pdf">TestU01: A C Library for Empirical Testing of
+Random Number Generators</a></p>
+<p>We added a few more methods for creating random numbers with more variety. These methods are:</p>
+<ul>
+<li><code>uint64_t squares64RNG(inout uint64_t ctr)</code>, which generates 64-Bit random integers from two 32-Bit random integers</li>
+<li><code>double squaresDoubleRNG(inout uint64_t ctr)</code>, which generates uniformly distributed doubles between 0 and 1 from one 64-Bit random integer</li>
+<li><code>double squaresNormalRNG(inout uint64_t ctr, double mu, double sigma)</code>, which creates (via the Box-Muller transform) a normal distributed double with mean <code>mu</code> and standard deviation <code>sigma</code>. This takes three random doulbes, which takes six 32-Bit integers.</li>
+</ul>
+<p><a href="https://en.wikipedia.org/wiki/Box%E2%80%93Muller_transform?oldformat=true">Box–Muller transform</a></p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="transformation-between-coordinate-systems"><a class="header" href="#transformation-between-coordinate-systems">Transformation between coordinate systems</a></h1>
+<h2 id="how-to-calculate-world-coordinates"><a class="header" href="#how-to-calculate-world-coordinates">How to calculate World Coordinates</a></h2>
+<p>This explains how to get world coordinates (global position and orientation of an optical element) from the sequential setup of a beamline that is often used, where the position and orientation of an element is described with distances and rotations relative to its predecesor.</p>
+<p>First a small introduction to rotation matrices which is not super relevant for the transformations but might help to visualize the rotations and understand why some angles are positive and others negative.</p>
+<details><summary>Rotation Matrices</summary>
+<h3 id="rotation-matrices"><a class="header" href="#rotation-matrices">Rotation matrices</a></h3>
+<p>A rotation through an angle $\theta$ can either be active or passive.
+An active rotation around for example the z-axis through the angle $\theta$ rotates the point within the coordinate system. Thereby, the coordinates of the point are changed whereas the coordinate system is left unchanged. When looking along the rotation axis in a right-handed coordinate system towards the origin, the rotation direction is counter-clockwise.</p>
+<p>$$
+R_a({\theta}) = 
+\begin{bmatrix}
+\cos(\theta) &amp; -\sin(\theta) &amp; 0 \
+\sin(\theta) &amp; \cos(\theta) &amp; \
+0           &amp; 0         &amp; 1 
+\end{bmatrix}
+$$</p>
+<p>A passive rotation leaves the position of the vector unchanged and rotates the axes of the coordinate system relative to the vector i.e. rotates the basis vectors (change of basis). When looking along the rotation-axis towards the origin in a right-handed coordinate system, the rotation of the rotating axes is clockwise. Thus, it is defined as an active rotation (applied to the basis vectors) in the other direction i.e. through the negative angle ($\cos(-\theta) = \cos(\theta)$ and $-\sin(\theta) = \sin(-\theta)$):</p>
+<p>$$   R_p({\theta}) = \begin{bmatrix}
+\cos(\theta) &amp; \sin(\theta) &amp; 0 \
+-\sin(\theta) &amp; \cos(\theta) &amp;  \
+0           &amp; 0         &amp; 1 
+\end{bmatrix} = \begin{bmatrix}
+\cos(-\theta) &amp; -\sin(-\theta) &amp; 0 \
+\sin(-\theta) &amp; \cos(-\theta) &amp;  \
+0           &amp; 0         &amp; 1 
+\end{bmatrix}
+$$</p>
+<p>The relation between axes and the position of the point are the same after each of the rotations: After the passive rotation the basis vectors are different and the vector coordinates stay the same whereas after the active rotation the vector coordinates are different but the basis vectors are the same.</p>
+<p>Example for active (left) and passive (right) rotation through $\alpha=25 \degree$:
+<img src="Developer//docs/src/uploads/7eb17510a7f200d4ce89ed337e0a4eda/rotation_active_vs_passive.PNG" alt="active_passive" />
+The relative position of the vector to the axes is the same after each rotation. 
+See also <a href="https://en.wikipedia.org/wiki/Active_and_passive_transformation">active vs passive transformation</a></p>
+<p>However, active and passive are in our case only an <em>interpretation</em> of the rotations that makes sense when looking at the beamline from a global point of view. Globally seen, the local coordinate system of each optical element is rotated and translated differently with respect to a global coordinate system whereas the vectors (the rays) only change by e.g. reflection when interacting with an element.
+Thus, we have coordinate systems for optical elements, that are identical for each element in the sense that the y-axis is the normal and the x-z-plane is the tangent plane of the surface at the origin, and for rays where the center ray is the z-axis and a global system. The transformation between the systems is implemented by rotating and translating the vectors within the same coordinate system.
+$\rightarrow$ In the implementation only the vectors are transformed by active transformations and the axes of the coordinate system stay the same, although in the &quot;real world&quot;, the beams remain unchanged and only the coordinate system is rotated around them.</p>
+</details>
+<p>The following sections describe how to calculate the transformation matrices from beam coordinates to element coordinates and again to (new) beam coordinates based on the given distance and angles in the sequential setup.
+This is relevant for RAY-X if you need to calculate the world coordinates from the user parameters that describe the sequential setup yourself and cannot directly use the world coordinates from the rml file: </p>
+<details><summary>Positioning of elements in sequential setup</summary>
+<p>In the old RAY rays are represented in a beam coordinate system. In that system the main ray always points from the origin towards the z-axis wheras the individual rays have slight deviations in their direction and origin.</p>
+<p>Elements are represented in an element coordinate system.
+The elements are mostly located in the x-z-plane of their coordinate system. The y-axis is the normal in the center of the element (Visualized in the <a href="https://it-ed-git.basisit.de/RAY/RAY/-/wikis/uploads/bdcf4515e03b2fccf462c5f0d76052c3/Paper_Schaefers_RAY_Springer_2007.pdf">documentation</a>).</p>
+<p>In order to calculate the intersection point with the &quot;quad&quot; function, we first need to transfer the incoming rays from beam coordinates to the object coordinates. The relation between these system is defined by two angles $\alpha$ and $\chi$ and a translation by $z_0$. The transformation affects the position and direction of the ray.</p>
+<ol>
+<li>
+<p>the offset $z_0$ describes the distance between the previous element or the source and the current optical element. </p>
+</li>
+<li>
+<p>the main ray should have a specific incidence angle $\alpha$ (angle between main ray and x-z-plane of the optical element). This rotation is counter-clockwise around the x-axis:</p>
+</li>
+</ol>
+<p>$    R_x({\alpha}) = \begin{bmatrix}
+1 &amp; 0 &amp; 0 \
+0 &amp; \cos(\alpha) &amp; -\sin(\alpha) \
+0 &amp; \sin(\alpha) &amp; \cos(\alpha)
+\end{bmatrix}$</p>
+<details><summary>Side note</summary>
+Side note for visualization: An example for this rotation interpreted as an [active](/docs/src/uploads/33a69b81f3f7c491842bcdeda4ca97b7/incidence_angle_active.PNG) and as a [passive](/docs/src/uploads/5ab2555382dc2b2ef10a9864aaee0224/incidence_angle_passive.PNG) rotation of the main ray (z-axis) and a ray $v$ through the grazing incidence angle $\alpha=25°$. The first coordinate system shows the incoming ray in the ray-coordinate system. In the second one the rays/the axes are rotated through $\alpha$ such that the rays lie in the element-coordinate system. In the third image the reflection is calculated. Finally, in the last image, the reflected ray/the axes are rotated to the new ray-coordinate system.
+Since we are using a right-handed coordinate system, the x-axis points into the image and the rotations that appear to be clockwise are actually counter-clockwise around the x-axis.
+</details>
+<ol start="3">
+<li>The second rotation through angle $\chi$ around the z-axis tilts the optical element such that the ray is not reflected upwards ($\chi=0°$) but to the right ($\chi=90°$), downwards ($\chi=180°$) or to the left ($\chi=270°$). This is a clockwise rotation. Thus, we rotate through $-\chi$ when $\chi$ is given.</li>
+</ol>
+<p>After tracing we need to transform the ray back to the beam coordinate system. Therefore we rotate back around $\chi$ and then rotate around the exit angle $\beta$ All these parameters are given as &quot;user&quot; parameters. The following section describes how to calculate beam-element and element-beam transformation matrices.</p>
+</details>
+<details><summary>Calculating transformation matrices between elements in sequential setup</summary>
+<h5 id="beam-to-element"><a class="header" href="#beam-to-element">Beam to Element</a></h5>
+<ol>
+<li>
+<p>Translation by $z_0$ in z direction = distance to preceeding element</p>
+</li>
+<li>
+<p>Rotation by azimuthal angle $\chi$ around z-axis. </p>
+</li>
+</ol>
+<p>$$
+R_z(-\chi) = \begin{bmatrix} \cos(-\chi) &amp; -\sin(-\chi) &amp; 0 \
+\sin(-\chi) &amp; \cos(-\chi) &amp; 0 \
+0 &amp; 0 &amp; 1 \end{bmatrix} =
+\begin{bmatrix} \cos(\chi) &amp; \sin(\chi) &amp; 0 \
+-\sin(\chi) &amp; \cos(\chi) &amp; 0 \
+0 &amp; 0 &amp; 1 \end{bmatrix}
+$$</p>
+<ol start="3">
+<li>Rotation through grazing incidence angle $\alpha$ around x-axis. Sometimes, the normal incidence angle with $90°-\alpha$ is given. Then, it has to be converted to the grazing incidence angle $\alpha$.<br></li>
+</ol>
+<p>$    R_x(\alpha) = \begin{bmatrix} 1 &amp; 0 &amp; 0 \ 
+0 &amp; \cos(\alpha) &amp; -\sin(\alpha) \ 0 &amp; \sin(\alpha) &amp; \cos(\alpha) \end{bmatrix}$</p>
+<p>Putting it all together this is an affine transformation and can be written in homogeneous coordinates as one single matrix:</p>
+<p>$$
+\begin{align*}
+M_{b2e} &amp;= R_{x}(\alpha) R_z(-\chi) T_z(z_0) \
+M_{b2e} &amp;= \begin{bmatrix} 1 &amp; 0 &amp; 0 &amp; 0\ 
+0 &amp; \cos(\alpha) &amp; -\sin(\alpha) &amp; 0 \ 0 &amp; \sin(\alpha) &amp; \cos(\alpha) &amp; 0 \ 0 &amp; 0 &amp; 0 &amp; 1 \end{bmatrix} \cdot \begin{bmatrix} \cos(\chi) &amp; \sin(\chi) &amp; 0 &amp; 0\ -\sin(\chi) &amp; \cos(\chi) &amp; 0 &amp; 0\ 0 &amp; 0 &amp; 1 &amp; 0 \ 0 &amp; 0 &amp; 0 &amp; 1 \end{bmatrix} \cdot \begin{bmatrix} 1 &amp; 0 &amp; 0 &amp; 0 \ 0 &amp; 1 &amp; 0 &amp; 0 \ 0 &amp; 0 &amp; 1 &amp; -z_0 \ 0 &amp; 0 &amp; 0 &amp; 1 \end{bmatrix} \
+&amp;= \begin{bmatrix} \cos(\chi) &amp; \sin(\chi) &amp; 0 &amp; 0 \
+-\sin(\chi)\cos(\alpha) &amp; \cos(\chi)\cos(\alpha) &amp; -\sin(\alpha) &amp; z_0 \sin(\alpha) \
+-\sin(\chi) \sin(\alpha) &amp; \sin(\alpha)\cos(\chi) &amp; \cos(\alpha) &amp; -z_0 \cos(\alpha) \ 0 &amp; 0 &amp; 0 &amp; 1 \end{bmatrix}
+\end{align*}
+$$</p>
+<h5 id="element-to-beam"><a class="header" href="#element-to-beam">Element to Beam</a></h5>
+<p>After the interaction with the element, the reflected ray $x_R$ is transformed back to a beam coordinate system. The rotations around the axes are applied in reverse order.</p>
+<ol>
+<li>Rotation through gracing exit angle $\beta$ around x-axis. We do not need to rotate back through $\alpha$ but keep rotating in the same direction since the new z-axis should point in the direction of the reflected and not of the incoming main ray. E.g. $\beta$ is the same as $\alpha$ for mirrors.<br></li>
+</ol>
+<p>$$
+R_x(\beta) = \begin{bmatrix} 1 &amp; 0 &amp; 0 \ 
+0 &amp; \cos(\beta) &amp; -\sin(\beta) \ 0 &amp; \sin(\beta) &amp; \cos(\beta) \end{bmatrix}
+$$</p>
+<ol start="2">
+<li>Rotation back through $\chi$.<br></li>
+</ol>
+<p>$$
+R_z(\chi) = R_z^{-1}(-\chi) = \begin{bmatrix} \cos(\chi) &amp; -\sin(\chi) &amp; 0 \
+\sin(\chi) &amp; \cos(\chi) &amp; 0 \
+0 &amp; 0 &amp; 1 \end{bmatrix}
+$$</p>
+<p>In homogeneous coordinates:</p>
+<p>$$
+\begin{align*}
+M_{e2b} &amp;= R_z(\chi)R_{x}(\beta) \
+M_{e2b} &amp;= \begin{bmatrix} \cos(\chi) &amp; -\sin(\chi) &amp; 0 &amp; 0\
+\sin(\chi) &amp; \cos(\chi) &amp; 0 &amp; 0\
+0 &amp; 0 &amp; 1 &amp; 0 \ 0 &amp; 0 &amp; 0 &amp; 1 \end{bmatrix} \cdot  \begin{bmatrix} 1 &amp; 0 &amp; 0 &amp; 0\ 
+0 &amp; \cos(\beta) &amp; -\sin(\beta) &amp; 0 \ 0 &amp; \sin(\beta) &amp; \cos(\beta) &amp; 0 \ 0 &amp; 0 &amp; 0 &amp; 1\end{bmatrix}\
+&amp;= \begin{bmatrix} \cos(\chi) &amp; -\sin(\chi) \cos(\beta) &amp; \sin(\chi)\sin(\beta) &amp; 0 \
+\sin(\chi) &amp; \cos(\chi)\cos(\beta) &amp; -\cos(\chi)\sin(\beta) &amp; 0 \
+0 &amp; \sin(\beta) &amp; \cos(\beta) &amp; 0 \ 0 &amp; 0 &amp; 0 &amp; 1 \end{bmatrix}
+\end{align*}
+$$</p>
+<p>(Since there is no translation a 3x3 matrix would suffice)</p>
+<h3 id="misalignment"><a class="header" href="#misalignment">Misalignment</a></h3>
+<p>Misalignment is used when the optical element does not lie exactly where it should after applying the beam to element matrix. Therefore some rotation or translation might be necessary before the intersection point can be calculated.</p>
+<p>The misalignment transformation matrix $M_{mis}$ is simply derived from the user parameters $d_x$, $d_y$, $d_z$, $d_{\phi}$, $d_{\psi}$, $d_{\chi}$. It can be calculated by spliting into a transformation matrix (from $d_x$, $d_y$, $d_z$) and multiplying with a rotation matrix (from $d_{\phi}$, $-d_{\psi}$, $d_{\chi}$):</p>
+<p>$$
+\begin{align*}
+M_{mis} &amp;= T_{x,y,z} R_{\phi, -\psi, \chi} \
+&amp;= \begin{bmatrix} 1 &amp; 0 &amp; 0 &amp; -d_x\
+0 &amp; 1 &amp; 0 &amp; -d_y\
+0 &amp; 0 &amp; 1 &amp; -d_z \ 0 &amp; 0 &amp; 0 &amp; 1 \end{bmatrix} \cdot R^x_{-\psi} \cdot R^y_{\phi} \cdot R^z_{\chi}
+\end{align*} 
+$$</p>
+<p>where e.g. $R^x_{\psi}$ is the 4x4 homogeneous rotation matrix through $\psi$ around the x-axis.</p>
+<p>The inverse misalignment matrix is then calculated as follows:</p>
+<p>$$
+\begin{align*}
+M_{mis}^{-1} &amp;= R_{-\psi, \phi, \chi}^{-1} \cdot T_{x,y,z}^{-1}\
+&amp;= (R^x_{-\psi} \cdot R^y_{\phi} \cdot R^z_{\chi}) ^{T} \cdot 
+\begin{bmatrix}
+1 &amp; 0 &amp; 0 &amp; d_x \
+0 &amp; 1 &amp; 0 &amp; d_y \
+0 &amp; 0 &amp; 1 &amp; d_z \ 
+0 &amp; 0 &amp; 0 &amp; 1 
+\end{bmatrix} 
+\end{align*}
+$$</p>
+<p>Since rotation matrices are orthogonal, the inverse of $(R^x_{-\psi} R^y_{\phi} R^z_{\chi})$ is the same as the transpose. The inverse of the translation matrix is the same but with negative offsets.</p>
+<p>$M_{mis}$, $M_{mis}^{-1}$ are multiplied with $M_{b/g2e}$ and $M_{e2g/b}$, respectively, to form the final transformation matrices which could be given to the shader if we would still use the sequential approach in RAY-X. However, we use a global coordinate system instead of the beam coordinate system but don't worry you didn't just read all of that for nothing, it will be important in the derivation of the transformation from global to element coordinates and back.</p>
+</details>
+<p>The next section describes how to replace the beam coordinate system that is used in the sequential approach with the global coordinate system and how to calculate the position and orientation.</p>
+<details><summary>Sequential to world coordinates</summary>
+<p>As explained in the previous sections, there is no global coordinate system in the sequential implementation but instead rays are transformed from beam coordinate system to element coordinate system and back to a different beam coordinate system such that the z-axis of the beam coordinate system always follows the main ray, which means that the main ray with $pos=(0,0,0)$, $dir=(0,0,1)$ in beam coordinates is always the same after each interaction with an optical element.</p>
+<p>In a global coordinate system this is different. The origin of the system is the (first) source. When the main ray hits the first element, it is transformed into the element's coordinate system, traced (e.g. reflected) and transformed back into the global coordinate system. Then it does no longer have the values $pos=(0,0,0)$ and $dir=(0,0,1)$. To achieve this for the first element (i=1) in the beamline, we can still use $M_{b2e}$ that we defined previously $(M_{g2e}^{-1} = M_{b2e}^{-1})$ since for the first element the global coordinate system is the same as the beam coordinate system of the incoming rays (bc the source is in $(0,0,0)$ which is the origin of both the global coord system and the initial beam coord. system). However, we need a different element to global coordinate system transformation for this elemet $M_{g2e}^{-1} \neq M_{b2e}^1$ and of course also for all following elements. Moreover, for all following elements we also need a different $M_{g2e}^i \neq M_{b2e}^i$ for $i&gt;1$.</p>
+<h3 id="transformation-matrices-from-position-and-orientation"><a class="header" href="#transformation-matrices-from-position-and-orientation">Transformation matrices from position and orientation</a></h3>
+<p>global coordinates are sometimes given by the user directly via e.g. an rml file, which stores the global orientation as a 3x3 matrix and the position as a 3 element vector. Expanding both to homogeneous 4x4 rotation/translation matrices makes it possible to calculate $M_{g2e}$ and $M_{e2g}$ by multiplying them.
+For the case that the beamline was still build sequentially, it was decided to first build the global position and orientation from $\alpha$, $\beta$, $\chi$, the distance $z_0$ and the misalignment and then derive the matrices $M_{g2e}$ and $M_{e2g}$  in the same way.</p>
+<p>The following calculations can be used for all optical elements. For the ellipsoid, however, the misalignment can be defined in the coordinate system of the mirror or of the curvation. The usual misalignment is in the coordinate system of the mirror. The coordinate system of the curvation differs by a rotation through the tangent angle $\theta$ around the x-axis. This angle depends on the shape of the ellipsoid. Depending on the coordinate system, we add the rotation $T_x(\theta)$ (in red), for all other elements this is irrelevant so $\theta = 0$.</p>
+<p>As mentioned before, in the case that the element is the first in the beamline, it is simply placed at a certain distance on the z-axis. Therefore, the position (pos) is, in homogeneous coordinates:</p>
+<p>$$
+pos^0 = \begin{bmatrix} 0 \ 0 \ z_0^0 \ 1 \end{bmatrix} + or^0 \cdot \color{red} R_x^0(\theta) \color{black} \cdot \begin{bmatrix} d_x^0 \ d_y^0 \ d_z^0 \ 1 \end{bmatrix}
+$$</p>
+<p>where or is the orientation of the element and $d_x$, $d_y$, $d_z$ are the positional misalignment.
+The orientation of the first element is calculated as follow:</p>
+<p>$$
+or^0 = R_x^0(\alpha) R_z^0(-\chi) \cdot \color{red} R_x^0(\theta) \color{black} \cdot R_{\phi, -\psi, \chi}^0 \cdot \color{red} R_x^0(\theta)^T \color{black}
+$$</p>
+<p>where $R_{\phi -\psi \chi}$ contains the orientational misalignment and $R_x(\alpha) R_z(-\chi)$ is the rotational part of $M_{b2e}$ (without the translation by $z_0$ since the distance is not part of the orientation but of the position)</p>
+<p>When the element is not the first in the beamline, we need in addition to the ususal parameters of this element ($\alpha$, $\beta$, $\chi$, the distance $z_0$ and the misalignment) also the global position and orientation and the $M_{e2b}$ matrix of the previous element. Unfortunately, we also have to remove the misalignment from the global position of the previous element (equation 1), then we can add the distance from the previous to new element to the position of the previous element following the direction of the outgoing ray (2). Finally, we can add the positional misalignment of element i to the position (3).</p>
+<p>$$
+\begin{align}
+pos^{(i-1)<em>} &amp;= pos^{i-1} - or^{i-1} \cdot \color{red} R_x^{i-1}(\theta) \color{black} \cdot \begin{bmatrix} d_x^{i-1} \ d_y^{i-1} \ d_z^{i-1} \ 1 \end{bmatrix} \
+pos^i &amp;= pos^{(i-1)</em>} + or^{i-1} \cdot M_{e2b}^{i-1} \cdot \begin{bmatrix} 0 \ 0 \ z_0^i \ 1 \end{bmatrix} \
+pos^i &amp;= pos^i + or^{i} \cdot \color{red} R_x^{i}(\theta) \color{black} \cdot \begin{bmatrix} d_x^i \ d_y^i \ d_z^i \ 1 \end{bmatrix}
+\end{align}
+$$</p>
+<p>The calculation of the orientation of the ith element is a bit simpler. The global orientation of element i is the global orientation of the previous element $(or^{i-1})$ without the rotational misalignment (1) multiplied with the rotation of the new element coordinate system with respect to the previous element coordinate system $(M_{e2b}, \text{eq 2})$ multiplied with the orientation of the new element in its own element coordinate system (which is calculated in the same way as for the first element: local orientation $\cdot$ misalignment, eq. 3):</p>
+<p>$$
+\begin{align}
+or^{(i-1)<em>} &amp;= or^{i-1} \cdot \color{red} R_x^{i-1}(\theta)^T \color{black} \cdot (R_{\phi, -\psi, \chi}^{i-1})^{T} \cdot \color{red} R_x^{i-1}(\theta) \color{black}\
+or^i &amp;= or^{(i-1)</em>} \cdot M_{e2b}^{i-1} \
+or^i &amp;= or^i \cdot (R_x^i(\alpha) R_z^i(-\chi) \cdot \color{red} R_x^i(\theta) \color{black} \cdot R_{\phi, -\psi, \chi}^i \color{red} R_x^i(\theta)^T \color{black})
+\end{align}
+$$</p>
+<p>These calculations are done in WorldUserParams.cpp. They have been tested but still there might be some mistake in there, so feel free to question the calculations if something is not working.</p>
+</details>
+<p>Once you have the global position and orientation, you can derive the Transformation matrices by expanding the position p to a homogeneous translation matrix and the orientation to a homogeneous rotation matrix:</p>
+<p>$M_{g2e} = 
+\begin{bmatrix} 
+1 &amp; 0 &amp; 0 &amp; -p_x \
+0 &amp; 1 &amp; 0 &amp; -p_y \
+0 &amp; 0 &amp; 1 &amp; -p_z \
+0 &amp; 0 &amp; 0 &amp; 1
+\end{bmatrix} \cdot or$
+$M_{e2g} = M_{g2e}^{-1} = or^T \cdot \begin{bmatrix} 
+1 &amp; 0 &amp; 0 &amp; p_x \
+0 &amp; 1 &amp; 0 &amp; p_y \
+0 &amp; 0 &amp; 1 &amp; p_z \
+0 &amp; 0 &amp; 0 &amp; 1
+\end{bmatrix}$</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="quadric-function"><a class="header" href="#quadric-function">Quad(ric) Function</a></h1>
+<p>Function for calculating the intersection of a ray with the surface of an optical element in 3-dimensional space.</p>
+<h3 id="input"><a class="header" href="#input">Input:</a></h3>
+<ul>
+<li>16 parameters $a_{11}$ to $a_{44}$ to define the surface in 3D space with the general equation for second order surfaces. Parameter values for specific surfaces can be found in the <a href="https://it-ed-git.basisit.de/RAY/RAY/-/wikis/uploads/bdcf4515e03b2fccf462c5f0d76052c3/Paper_Schaefers_RAY_Springer_2007.pdf">documentation</a>.</li>
+<li>$ray = \begin{bmatrix} x_{S'} \ y_{S'} \z_{S'} \ \end{bmatrix} + t \begin{bmatrix} l_{S'} \ m_{S'}\ n_{S'} \ \end{bmatrix}$</li>
+<li>weight/III (set to 0(python)/-4(Fortran) if ray missed surface, unchanged otherwise)</li>
+<li>icurv: determines the sign in the formula for calculating $t$, if negative first intersection point, if positive second intersection point.</li>
+</ul>
+<h3 id="output"><a class="header" href="#output">Output:</a></h3>
+<ul>
+<li>modified ray</li>
+<li>normal at intersection point</li>
+<li>weight/III</li>
+</ul>
+<h3 id="calculation-of-intersection-point"><a class="header" href="#calculation-of-intersection-point">Calculation of intersection point</a></h3>
+<p>general equation for second order surfaces:
+$$F(x,y,z) = a_{11}x^2 + a_{22}y^2 + a_{33}z^2 + 2a_{12}xy + 2a_{13}xz + 2a_{23}yz + 2a_{14}x + 2a_{24}y + 2a_{34}z + a_{44}$$</p>
+<p>The intersection is determined by inserting the x, y and z-coordinates of the ray in $F(x,y,z)$ and set to zero: <br>
+$$F(x_{S'}+t \cdot l_{S'} ,y_{S'}+t \cdot m_{S'}, z_{S'}+t \cdot n_{S'}) = 0$$</p>
+<p>We obtain a quadratic equation of the form $0 = a \cdot t^2 + b \cdot t + c$ with variable $t$ and the following coefficients:</p>
+<p>$$
+\begin{align*}
+a &amp;= a_{11}l_{S'}^2 + a_{22}m_{S'}^2 + a_{33}n_{S'}^2 + 2a_{13}l_{S'}n_{S'} + 2a_{12}l_{S'}m_{S'} + 2a_{23}m_{S'}n_{S'} \
+b &amp;= 2a_{11}x_{S'}l_{S'} + 2a_{22}y_{S'}m_{S'} + 2a_{33}z_{S'}n_{S'} \
+&amp;+ 2a_{12}y_{S'}l_{S'} + 2a_{12}x_{S'}m_{S'} 
++ 2a_{13}z_{S'}l_{S'} + 2a_{13}x_{S'}n_{S'} \
+&amp;+ 2a_{23}z_{S'}m_{S'} + 2a_{23}y_{S'}n_{S'} 
++ 2a_{14}l_{S'} + 2a_{24}m_{S'} + 2a_{34}n_{S'} \
+c &amp;= a_{11}x_{S'}^2 + a_{22}y_{S'}^2 + a_{33}z_{S'}^2 + 2a_{12}x_{S'}y_{S'} + 2a_{13}x_{S'}z_{S'} + 2a_{23}y_{S'}z_{S'} \ 
+&amp;+ 2a_{14}x_{S'} + 2a_{24}y_{S'} + 2a_{34}z_{S'} + a_{44}
+\end{align*}
+$$</p>
+<p>Since a, b and c can simply be calculated, we could solve the equation directly with  $t = \frac{-b+ICURV \cdot \sqrt{b^2-4ac}}{2a}$ and use $t$ to find the intersection point. If ICURV is negative, we get the first intersection point with the object (smaller $t$). If ICURV is positive we get the second intersection point from when the ray exits the element (larger $t$). Some optimizations are applied to this formula in the code. Depending on the largest component in the direction of the ray, it is normalized in x, y or z direction to simplify the ray equation. Thus, there are three cases.</p>
+<h3 id="optimization"><a class="header" href="#optimization">Optimization</a></h3>
+<p>Assume $l_{S'} \geq m_{S'}$ and $l_{S'} \geq n_{S'}$ (first case). Then, we can divide the direction by $l_{S'}$, such that it is normalized in x and the y- and z-coordinates are within $[-1,1]$ (I). Moreover, we can translate the origin of the ray along the direction vector towards the origin of the coordinate system until the $y$-$z$-plane is hit $(x=0, II)$. Then, we end up with a normalized ray (III), where $x=t$.</p>
+<p>$$
+\begin{align*}
+ray 
+&amp;\overset{\text{I}}{=} \begin{bmatrix} x_{S'} \ y_{S'} \z_{S'} \ \end{bmatrix} + t \begin{bmatrix} 1 \ m_{S'}/l_{S'}\ n_{S'}/l_{S'} \ \end{bmatrix} \
+&amp;\overset{\text{II}}{=} \begin{bmatrix} x_{S'}-1\cdot x_{S'} \ y_{S'} - (m_{S'}/l_{S'}) \cdot y_{S'} \z_{S'} - (n_{S'}/l_{S'}) \cdot z_{S'} \ \end{bmatrix} + t \begin{bmatrix} 1 \ m_{S'}/l_{S'}\ n_{S'}/l_{S'} \ \end{bmatrix} \
+&amp;\overset{\text{III}}{=} \begin{bmatrix} 0 \ y \ z \end{bmatrix} + t \begin{bmatrix} 1 \ a_{ml} \ a_{nl} \ \end{bmatrix} 
+\end{align*}
+$$</p>
+<p>When we plug this parameterization of the ray into $F(x,y,z)=0$, some terms in a, b and c are removed (see code).</p>
+<p>Since every term in b contains the factor 2, the equation for calculating t can be simplified:
+$$
+t = \frac{-2\frac{b}{2} +ICURV \cdot \sqrt{(2\frac{b}{2})^2 - 4ac}}{2a} = \frac{-2\frac{b}{2} +ICURV \cdot 2\sqrt{(\frac{b}{2})^2 - ac}}{2a} = \frac{-\frac{b}{2} +ICURV \cdot \sqrt{(\frac{b}{2})^2 - ac}}{a}
+$$</p>
+<p>In the code the factor 2 is left out of the equation for $b$ from the beginning. Thus, what is called $b$ in the code is actually $\frac{b}{2}$.</p>
+<p>If the term in the root is negative there is no intersection and weight is set to 0 (or III to -4 in fortran). 
+Otherwise it is checked whether the factor a is much smaller than $c$. Then, the divisor is very small or zero which can cause problems with the division. In that case, $a \cdot t^2$ is removed from the quadratic equation $a \cdot t^2 + b \cdot t + c$ which thus yields $t=x=- \frac{c}{b}$ or $t=x= \frac{c}{2b}$ in the code since the factor $2$ is excluded from $b$ (<a href="https://www.cs.uaf.edu/2012/spring/cs481/section/0/lecture/01_26_ray_intersections.html">see also</a> (Ray Quadric Intersection)). 
+If $a$ is not much smaller than $c$, $t$ is calculated with the simplified equation above. Subsequently, $t (=x)$ is plugged into the modified ray equation and the intersection point is calculated.</p>
+<p>The other two cases for when $y$ or $z$ are the largest component of the direction of the ray are similar.</p>
+<p>The partial derivatives of $F(x,y,z)$ form the normal vector $f_{x,y,z}$ of the surface. Inserting the calculated intersection point into the normal vector yields the normal of the surface at this specific point. The intersection point is set to be the new origin of the ray. The ray direction $(l_{S'},m_{S'},n_{S'})$ remains unchanged.</p>
+<h3 id="general-equation-for-second-order-surfaces"><a class="header" href="#general-equation-for-second-order-surfaces">General equation for second order surfaces</a></h3>
+<p>The equation can describe the surface of several elements in a similar way as a circle with radius 1 can be described in 2D as $x^2 + y^2 -1 = 0$. Elements that can be described by this general equation include sphere, ellipsoid, plane, cone, cylinder, paraboloid. These are so called quadric surfaces. Surfaces that cannot be described by any quadratic function include for example the torus.
+The equation refers to a right-handed coordinate system with the center of the optical element in the origin. The element's surface is the x-z-plane and the y-axis is the normal vector. </p>
+<p>$$
+\begin{align*}
+F(x,y,z) &amp;= \vec{x}^TA\vec{x} \
+\vec{x} = \begin{bmatrix} x \ y \ z \ 1 \end{bmatrix}
+A &amp;= \begin{bmatrix} a_{11} &amp; a_{12} &amp; a_{13} &amp; a_{14} \
+a_{21} &amp; a_{22} &amp; a_{23} &amp; a_{24} \
+a_{31} &amp; a_{32} &amp; a_{33} &amp; a_{34} \
+a_{41} &amp; a_{42} &amp; a_{43} &amp; a_{44} 
+\end{bmatrix} \
+a_{ij} = a_{ji} &amp;\Rightarrow A^T = A
+\end{align*}
+$$</p>
+<p>Literature: <br>
+<a href="https://en.wikipedia.org/wiki/Quadric">https://en.wikipedia.org/wiki/Quadric</a> <br>
+<a href="https://www.win.tue.nl/%7Esterk/Bouwkunde/2db60-chap3.pdf">https://www.win.tue.nl/~sterk/Bouwkunde/2db60-chap3.pdf</a></p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="approximation-of-ray-object-intersection-in-the-case-of-quadric-surfaces"><a class="header" href="#approximation-of-ray-object-intersection-in-the-case-of-quadric-surfaces">Approximation of Ray Object Intersection in the Case of Quadric Surfaces</a></h1>
+<p>The following illustration intends to aid your intuition concerning the intersection point calculation for rays. Quadrics in Ray-X have the origin $(0, 0, 0)$ in the object coordinate system. </p>
+<h2 id="geometric-shape-of-objects"><a class="header" href="#geometric-shape-of-objects">Geometric Shape of Objects</a></h2>
+<p>Beamline objects in Ray-X can have the following shapes:</p>
+<ul>
+<li>Rectangle</li>
+<li>Ellipse</li>
+</ul>
+<p>When we define the height and width of an object, we are defining the extent of these shapes - in the figure below, you can see an example of a rectangular shape.</p>
+<p>Currently, we are calculating the intersection of a planar surface in the xz-plane and use this as an approximation for our quadric surface. You can see this approximation in the figure below. The points $A_1,B_1,C_1,D_1$ form a plane which isn't curved, like the quadric is in this part.</p>
+<p>This could lead to a reported hit (resp. miss) of the object, where there should be a miss (resp. hit).</p>
+<p><img src="Developer//docs/src/uploads/809e84f0b69db93770ef0cd57729b892/image.png" alt="image" /></p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="efficiency"><a class="header" href="#efficiency">Efficiency</a></h1>
+<p>wiki for efficiency calculations</p>
+<h3 id="snells-law"><a class="header" href="#snells-law">Snell's law</a></h3>
+<p>A fraction of the light is reflected and another transmitted:</p>
+<p><img src="https://upload.wikimedia.org/wikipedia/commons/8/89/Fresnel1.svg" alt="refraction_fresnel" /><br>
+$\theta_i =$  (normal) incidence angle <br>
+$\theta_r =$ (normal) reflection angle (same as $\theta_i$)<br>
+$\theta_t =$ (normal) transmittance angle <br>
+$N_1 =$ refraction index of material from which the ray is coming  (left in image)<br>
+$N_2 =$ refraction index of material into which the ray is going (right in image)<br></p>
+<p>all parameters are potentially complex numbers. The refractive indices are retrieved from files (Palik, Henke, Cromer..)</p>
+<p>Snell's law:
+$$
+N_1 \sin \theta_i = N_2 \sin \theta_t \rightarrow \sin \theta_t = \frac{N_1}{N_2} \sin \theta_i
+$$</p>
+<p>$\theta_i$, $N_1$, $N_2$ are known, we are looking for $\theta_t$.  <br>
+We do not calculate the angle specifically but only the cosinus, which is sufficient for further calculations and more efficient/precise than calculating the angle itself because we do not need to use more trigonometric functions.
+We can calculate the incidence angle $\theta_i$ of each ray from its direction and the surface normal. Then we calculate $\cos(\theta_i)$ and from that we can derive $\cos(\theta_t)$ with snell's law:</p>
+<p>$$
+(\sin \theta_i)^2 = 1 - (\cos \theta_i)^2 \
+(\sin \theta_t)^2 = (\frac{N_1}{N_2})^2 (\sin \theta_i)^2 \
+\cos \theta_t = \sqrt{1 - (\sin \theta_t)^2} = \sqrt{1 - \Big(\frac{N_1}{N_2} \sin \theta_i\Big)^2}
+$$</p>
+<p>The cosine of both angles is then used in the Fresnel equations to calculate the s- and p-polarization</p>
+<h3 id="fresnel-equation"><a class="header" href="#fresnel-equation">Fresnel equation</a></h3>
+<p>Any polarization state can be described by two components: one vertical and one horizontal. Or - relative to the plane of incidence - s- and p-polarization. 
+p-polarization (parallel, left image) lies parallel in the plane of incidence and s-polarization (senkrecht, right image) is orthogonal to the plane of incidence.</p>
+<img src="https://upload.wikimedia.org/wikipedia/commons/4/4d/Polarisation_p.png" alt="ppol" width="200"/>
+<img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Polarisation_s.png" alt="spol" width="200"/>
+<p>the reflectance of both polarizations is calculated with the fresnel equations:</p>
+<p>$$r_s = \frac{N_1 \cdot \cos \theta_i - N_2 \cdot \cos \theta_t}{N_1 \cdot \cos \theta_i + N_2 \cdot \cos \theta_t}$$
+$$r_p = \frac{N_2 \cdot \cos \theta_i - N_1 \cdot \cos \theta_t}{N_2 \cdot \cos \theta_i + N_1 \cdot \cos \theta_t}$$</p>
+<p>(The transmitted power is then &quot;the rest&quot;: $t_s = 1 - r_s$ and $t_p = 1 -r_p$)</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="plane-mirror"><a class="header" href="#plane-mirror">Plane Mirror</a></h1>
+<p>asdf</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="reflection-zone-plate"><a class="header" href="#reflection-zone-plate">Reflection Zone Plate</a></h1>
+<p>Informations about RZP</p>
+<p>Literature:<br/>
+<a href="Developer/uploads/45bc7d1c0044bc7dbf5b65bd126881f5/RehanekJens_2014_Doktorarbeit.pdf">PhD_JensRehanek_2014.pdf</a><br/>
+<a href="Developer//docs/src/uploads/0d9a389a4e5f548ec89c174338bccbc6/L%C3%B6chel_Doktorarbeit_3+++.pdf">PhD_HeikeLöchel_2016.pdf</a><br/></p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="vscode-recommended-extensions"><a class="header" href="#vscode-recommended-extensions">VSCode recommended Extensions</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><p>RAY-X uses a number of languages but mainly C++ and GLSL. </p>
+<h1 id="debugging-the-applications-c"><a class="header" href="#debugging-the-applications-c">Debugging the application's C++</a></h1>
+<p>If you are using VS Code, you may create a new Debugging Setting to launch RAY-X through gdb. <a href="https://code.visualstudio.com/Docs/editor/debugging">More here</a></p>
+<p>Once the setting file (launch.json) is ready, you can change and add arguments for VSCode/gdb to parse. </p>
+<ul>
+<li>set &quot;program&quot; : &quot;${workspaceFolder}/build/bin/TerminalApp&quot; (For TerminalApp)</li>
+<li>set &quot;args&quot; : [arg1,arg2 etc.] (keep arguments between &quot; &quot; )</li>
+<li>set &quot;cwd&quot; : &quot;${workspaceFolder}/build/bin/&quot;</li>
+</ul>
+<p>If you are familiar with gdb, add more commands in setupCommands, eg. Disassembly Flavor for Intel </p>
+<h1 id="debugging-the-applications-vulkan-and-glsl"><a class="header" href="#debugging-the-applications-vulkan-and-glsl">Debugging the application's Vulkan and GLSL</a></h1>
+<p>The shader language (GLSL) does not offer live debugging and stepping with gdb or similar. If you run the CPU Tracer then you can step through the code as it was compiled into C code, since it's only running on the CPU. However when using Vulkan a few more steps needs attention. </p>
+<p>Vulkan offers a debug extension layer that can be activated with the combination of vkconfig to launch the application in debug mode. </p>
+<ol>
+<li>
+<p>We need <code>#extension GL_EXT_debug_printf : enable</code> in the shader file.</p>
+</li>
+<li>
+<p>We also need to add <code>VK_KHR_shader_non_semantic_info</code> as in extension in the Vulkan Instance.</p>
+</li>
+<li>
+<p>Launch the application with <strong>vkconfig</strong> and chose the <strong>Debug Printf Preset</strong> in <em>VK_LAYER_KHRONOS_validation</em>. (Vkconfig should be packaged with Vulkan-SDK)</p>
+</li>
+<li>
+<p>Make sure to increase <strong>Printf buffer size</strong> under <strong>Debug Printf</strong> if you get a Validation Layer Warning.</p>
+</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/KhronosGroup/Vulkan-ValidationLayers/master/docs/images/vkconfig_setup.png" alt="screenshot" title="Khronos Github screenshot" /></p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="api-user-area"><a class="header" href="#api-user-area">API User Area</a></h1>
+<p>RAY-X is a simulation software for scientific work on beamlines in electron storage rings.
+In this part of the documentation you will find everything you need to know about:</p>
+<ul>
+<li>Implementation Details</li>
+<li>How to use interfaces</li>
+<li>What to do if you encounter bugs in our code</li>
+</ul>
+<p>Disclaimer: We can't guarantee the correctness of all the results, 
+especially in the early stages of development.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="how-to-use-raycore"><a class="header" href="#how-to-use-raycore">How to use RayCore</a></h1>
+<p>--- This page is outdated ---</p>
+<p>On this page you will find out how to use the RayCore library to build an Application.</p>
+<p>RayCore defines an EntryPoint in the file: EntryPoint.h. As you can see it expects an external Application-subclass to define the CreateApplication()-function that returns a pointer to an Application object. In this function you can start threads, define configurations, start a gui and so on.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="ray-x-profiling"><a class="header" href="#ray-x-profiling">RAY-X Profiling</a></h1>
+<p>Here you can find an overview of the profiling tools used in RAY-X. Further reading can be done in the code (see Instrumentor.h file in &quot;Debug&quot;-folder).</p>
+<p><em>The code for this profiler, was taken from a tutorial by TheCherno on Youtube.</em></p>
+<h2 id="usage"><a class="header" href="#usage">Usage</a></h2>
+<p>The Profiling used in RAYX is a simple json export of the time each profiled function took. If you want to add profiling to a function, simply add:</p>
+<p><code>RAYX_PROFILE_FUNCTION;</code></p>
+<p>at the beginning of the function. </p>
+<p>For profiling specific scopes, you can use <code>RAYX_PROFILE_SCOPE</code>, which takes in a name for the scoped timer. </p>
+<h2 id="profiled-data"><a class="header" href="#profiled-data">Profiled Data</a></h2>
+<p>The data will be output to the directory, the executable was started in. You can use the tracing functionality of any chromium based browser to read the data.</p>
+<p>For example, use the URL &quot;chrome://tracing&quot; for the Chrome browser.</p>
+<h2 id="sessions"><a class="header" href="#sessions">Sessions</a></h2>
+<p>The profiling can happen in multiple sessions. You can't have to sessions running at the same time though. This is functionality is mainly supposed to give the option to separate data for different parts of the program. </p>
+<p>An example would be seperating measurements into <em>startup, runtime, shutdown.</em> </p>
+<p>The Macros used to create and end sessions:</p>
+<ul>
+<li><code>RAYX_PROFILE_BEGIN_SESSION</code></li>
+<li><code>RAYX_PROFILE_END_SESSION</code> </li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="object-coordinate-system"><a class="header" href="#object-coordinate-system">Object Coordinate System</a></h1>
+<p>Objects in RAY-X are conceptualized like this:</p>
+<p><img src="APIUser//docs/src/uploads/c74c09624fcbf3418bc98aa0e3ad3bd9/image.png" alt="image" />
+<em>Source: <a href="https://gitlab.helmholtz-berlin.de/RAY/RAY/-/wikis/uploads/bdcf4515e03b2fccf462c5f0d76052c3/Paper_Schaefers_RAY_Springer_2007.pdf">Schaefers</a></em></p>
+<p>Defining the direction vectors gives you full control over the orientation of the optical elemnts/surfaces.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="user-vs-model-parameter"><a class="header" href="#user-vs-model-parameter">User vs Model Parameter</a></h1>
+<p>In Ray-X we intend to work on better modularity and readability in our code. In our opinion, one step to achieve this, to reevaluate and restructure the parameters of Ray-UI. Since a lot of the parameters had dependencies on each other, we decided that a distinction between them was needed. This is where our definition of User and Model Parameters comes into play. </p>
+<h2 id="model-parameter"><a class="header" href="#model-parameter">Model Parameter</a></h2>
+<p>A Model Parameter is any parameter that is directly influencing the calculations of the tracer. Further, a Model Parameter can also be a parameter, which is required for the fundamental definition of our model. </p>
+<h3 id="example"><a class="header" href="#example">Example</a></h3>
+<p>The position and direction Matrix are not directly used in the calculations of the Tracer, but they still are Model Parameters, since they are essential in directly defining our model.</p>
+<h2 id="user-parameters"><a class="header" href="#user-parameters">User Parameters</a></h2>
+<p>User Parameters are all the parameters that are only used to calculate Model Parameters. They only exist to improve the user experience of our application and are neither passed directly to the tracer nor are needed to define our model.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="ray-generation"><a class="header" href="#ray-generation">Ray Generation</a></h1>
+<p>Rays are described in tree-dimensional space with an origin and a direction.
+The origin are described with a three dimensional vector. However, the direction can be interpreted as the cosines of two angles $\phi$ and $\psi$. Since the z-axis is the direction of the center ray, the direction of all other rays can be described as the angle between ray direction vector and z-y-plane (horizontal divergence $\phi$) and between vector and z-x-plane (vertical divergence $\psi$).
+See also <a href="https://it-ed-git.basisit.de/RAY/RAY/-/wikis/uploads/bdcf4515e03b2fccf462c5f0d76052c3/Paper_Schaefers_RAY_Springer_2007.pdf">documentation</a> p.18,19.</p>
+<p>$ray = \begin{bmatrix}
+x_s \ y_s \ z_s
+\end{bmatrix} + t 
+\begin{bmatrix}
+l_S \ m_S \ n_S
+\end{bmatrix}
+= \begin{bmatrix}
+x_s \ y_s \ z_s
+\end{bmatrix} + t 
+\begin{bmatrix}
+sin \phi_S \cdot cos \psi_S \ cos \psi_S \ cos \psi_S \cdot cos \phi_S
+\end{bmatrix}$</p>
+<p>When the ray is created in the light source, its origin and direction angles are chosen randomly.</p>
+<h2 id="light-sources-point-source"><a class="header" href="#light-sources-point-source">Light sources: Point source</a></h2>
+<p>The user sets the following parameters:</p>
+<ul>
+<li>number of rays</li>
+<li>source dimensions width(x-dir), height(y-dir) and depth(z-dir) </li>
+<li>horizontal and vertical divergence</li>
+</ul>
+<p>The intensity distribution in the lightsource is understood as the probability distribution of the parameters position and angle.
+The parameters $x$, $y$ and $z$ of position and the angles $\phi$ and $\psi$ are chosen randomly but according to a probability distribution. Uniformly distributed random numbers within the range $[0,1]$ are obtained by FORTRAN's <a href="https://gcc.gnu.org/onlinedocs/gcc-4.8.0/gfortran/RANDOM_005fNUMBER.html">random_number</a> function.
+There are two options for the probability distribution in the light source:
+soft edge (Gaussian) and hard edge (uniformly).
+Afterwards, some predefined offset can be added to each component.</p>
+<h3 id="hard-edge"><a class="header" href="#hard-edge">Hard edge</a></h3>
+<p>The hard edge option is the simpler one since the random numbers are already uniformly distributed. Thus, the ray parameters $x$, $y$, $z$, $\phi$, $\psi$ are chosen uniformly within the given extent (width, height, divergence..) of the point source by calculating a random number $u$, subtracting 0.5 such that the number ranges in $[-0.5,+0.5]$ and multiplying with the given width/height/depth or horizontal/vertical extent of the point source.</p>
+<p>$x_S = (u_x - 0.5) \cdot width$ <br>
+$y_S = (u_y - 0.5) \cdot height$ <br>
+$z_S = (u_z - 0.5) \cdot depth$ <br>
+$\phi_S = (u_\phi - 0.5) \cdot hor. div$ <br>
+$\psi_S = (u_\psi - 0.5) \cdot vert. div$ <br></p>
+<p>Thus, the x-coordinate of the origin, for example, lies within $[-\frac{width}{2}, +\frac{width}{2}]$ and is picked uniformly.</p>
+<h3 id="soft-edge"><a class="header" href="#soft-edge">Soft edge</a></h3>
+<p>(See also <a href="https://it-ed-git.basisit.de/RAY/RAY/-/wikis/uploads/bdcf4515e03b2fccf462c5f0d76052c3/Paper_Schaefers_RAY_Springer_2007.pdf">documentation</a> p.14)</p>
+<p>For the soft edge we have to transform the uniform distribution to a Gaussian distribution with $\mu = 0$ and $\sigma = extent$. The resulting values for a specific ray are not bound by the input parameters as for the hard edge. Instead, the more they deviate from $\mu$ the more rare they are. </p>
+<h4 id="in-fortran-code"><a class="header" href="#in-fortran-code">In FORTRAN code</a></h4>
+<p>The old implementation uses the following apporach:</p>
+<ol>
+<li>create two random numbers $u_1,u_2$ from a uniform distribution in $[0,1]$</li>
+<li>$x =(u_1 - 0.5 ) \cdot \sigma \cdot 9$</li>
+<li>$wx =  \exp(\frac{-x^2}{2})$</li>
+<li>$dif = wx-u_2$</li>
+<li>$wx$ is the value of the densitiy function $f(x)$ of the distribution with $\mu=0$ and $\sigma$. If $wx &lt; u_2$, then repeat from step 1 (keep $x$ with probability $f(x)$)</li>
+<li>else keep $x$</li>
+</ol>
+<p>Here, 9 is used as a factor for $\sigma$, since the Gaussian distribution is defined from $-\infty$ to $+\infty$ but a confidence interval $[-4.5 \sigma, +4.5 \sigma]$ contains already more than 99.99%.</p>
+<p>$w(x_s)$ lies in $[0,1]$. It is $1$ for $x_s = 0$ and becomes smaller the more $x_s$ deviates from $0$ according to the gaussian bell curve.
+Since $w(x_s)$ is the probability that $x_s$ occurs in our gaussian distribution, we want to use $x_s$ for the origin of the ray with a probability of $w(x_s)$. Thus, we get a second random number $u_x'$ from FORTRAN's random_number function and if $u_x' \leq w(x_s)$ holds we use $x_S$ for the ray. Otherwise, $x_S$ is discarded and re-calculated with a new random number $u_x$. Thereby, we use $x_S$ with a probability that corresponds to the Gaussian distribution.</p>
+<p>However, this is not very efficient as a lot of rays are thrown away. The following method uses a different approach which - although some values are discarded as well - is more efficient and creates two values in one iteration instead of one (<a href="https://www.desy.de/%7Esschmitt/blobel/eBuch.pdf">more here</a> Section 5.5.2):</p>
+<h4 id="more-efficiently"><a class="header" href="#more-efficiently">More efficiently:</a></h4>
+<ol>
+<li>create two random numbers $u_1, u_2$ from a uniform distribution in $[0,1]$</li>
+<li>calculate $x_1 = 2u_1-1$ and $x_2 = 2u_2 -1$</li>
+<li>calculate  $r^2 = x_1^2 + x_2^2r^2$</li>
+<li>if $r^2 &gt; 1$ repeat from step 1</li>
+<li>else calculate 
+$z_1 = x_1 \cdot \sqrt{-2\frac{\ln{r^2}}{r^2}} \cdot \sigma$ and 
+$z_2 = x_2 \cdot \sqrt{-2\frac{\ln{r^2}}{r^2}} \cdot \sigma$</li>
+</ol>
+<p>Now $z_1$ and $z_2$ are distributed according to the Gaussian distribution with $\mu = 0$ and $\sigma = extent$ as defined by the user.</p>
+<p>This calculation is faster since we get 2 values instead of 1. 
+(In python the first method took twice as long as this method to create the same amount of values)</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="vulkantracer-ray-x"><a class="header" href="#vulkantracer-ray-x">VulkanTracer (RAY-X)</a></h1>
+<p>The VulkanTracer is a ray tracing module using VULKAN by KHRONOS GROUP to efficiently trace rays with hardware acceleration.</p>
+<p>In the current version the VulkanTracer class is simply called using the run() function. In future versions information about the rays and optical elements will be transfered.</p>
+<p>Current procedure:</p>
+<ul>
+<li>generate rays</li>
+<li>create input and output buffers</li>
+<li>initialize Vulkan using initVulkan()</li>
+<li>run the main loop using mainLoop()</li>
+<li>clean up (free the memory allocated)</li>
+</ul>
+<p>initVulkan():</p>
+<ul>
+<li>create a Vulkan instance</li>
+<li>set up the debug messenger</li>
+<li>pick the physical device and create a logical device to access it</li>
+<li>create the input and output buffers</li>
+<li>create the descriptors to connect the buffers to the shader</li>
+<li>create a compute pipeline and a command buffer for the shader</li>
+</ul>
+<p>mainLoop():</p>
+<ul>
+<li>run the command buffer</li>
+<li>read the data from the output buffer</li>
+</ul>
+<hr />
+<h1 id="how-the-vulkantracer-works"><a class="header" href="#how-the-vulkantracer-works"><strong>How the VulkanTracer works</strong></a></h1>
+<p><img src="APIUser//docs/src/uploads/fe29b8ceeb1467bec87aed5de3144cad/vulkan_flow.png" alt="vulkan_flow" /></p>
+<h2 id="buffer-types-used"><a class="header" href="#buffer-types-used"><em>Buffer types used:</em></a></h2>
+<p><strong>A uniform buffer</strong> (<code>VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER</code>) is a descriptor type associated with a buffer resource directly, described in a shader as a structure with various members that load operations can be performed on. <a href="https://www.khronos.org/registry/vulkan/specs/1.2-extensions/html/vkspec.html#descriptorsets-storagebuffer">More here</a></p>
+<p><strong>A storage buffer</strong> (<code>VK_DESCRIPTOR_TYPE_STORAGE_BUFFER</code>) is a descriptor type associated with a buffer resource directly, described in a shader as a structure with various members that load, store, and atomic operations can be performed on.</p>
+<hr />
+<p><strong>Vulkan commands (Recording and pushing to pipeline):</strong></p>
+<p><img src="APIUser//docs/src/uploads/ed43760242d13d1004607fef0131747e/CommandBuffers.png" alt="CommandBuffers" /></p>
+<hr />
+<p><strong>Layout concept (applied on &quot;Sets&quot; using <code>storage buffer|uniform buffer</code>):</strong></p>
+<p><img src="APIUser//docs/src/uploads/090e2e5c162e12db1f5a93a1b30dbb79/DescriptorLayouts.png" alt="DescriptorLayouts" /></p>
+<hr />
+<h1 id="buffers"><a class="header" href="#buffers">Buffers:</a></h1>
+<table><thead><tr><th>Buffers</th><th>Size ( in Double)</th><th>Usage</th><th>Memory Property</th><th>Name</th></tr></thead><tbody>
+<tr><td>0</td><td>NumverOfRays*RAY_DOUBLE_AMOUNT</td><td>Transfer_DST|STORAGE_BUFFER</td><td>DEVICE_LOCAL</td><td>Ray Buffer</td></tr>
+<tr><td>1</td><td>NumberOfRays*RAY_DOUBLE_AMOUNT</td><td>Transfer_SRC|STORAGE_BUFFER</td><td>DEVICE_LOCAL</td><td>Output Buffer</td></tr>
+<tr><td>2</td><td>Quadric_parm+beamlineSize</td><td>STORAGE_BUFFER</td><td>COHERANT|VISIBLE</td><td>Quadric Buffer</td></tr>
+<tr><td>3</td><td>min(GPU_MAX_STAGING,numberOfRays)</td><td>STORAGE|DST|SRC</td><td>COHERANT|VISIBLE</td><td>Staging Buffer</td></tr>
+<tr><td>4</td><td>numberofRays*4</td><td>STORAGE_BUFFER</td><td>DEVICE_LOCAL</td><td>Buffer for xyznull</td></tr>
+</tbody></table>
+<h2 id="buffer-usages"><a class="header" href="#buffer-usages">Buffer Usages:</a></h2>
+<p><code>VK_BUFFER_USAGE_TRANSFER_SRC_BIT</code> specifies that the buffer can be used as the source of a transfer command (see the definition of VK_PIPELINE_STAGE_TRANSFER_BIT).</p>
+<p><code>VK_BUFFER_USAGE_TRANSFER_DST_BIT</code> specifies that the buffer can be used as the destination of a transfer command.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="app-user-area"><a class="header" href="#app-user-area">APP User Area</a></h1>
+<p>RAY-X is a simulation software for scientific work on beamlines in electron storage rings.
+In this part of the documentation you will find everything you need to know about:</p>
+<ul>
+<li>How to use the application</li>
+<li>What to do if you encounter errors</li>
+<li>The math its built on</li>
+<li>What you can expect from the results you get</li>
+</ul>
+<p>Disclaimer: We can't guarantee the correctness of all the results, 
+especially in the early stages of development.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="terminalapp"><a class="header" href="#terminalapp">TerminalApp</a></h1>
+<p>After a successful build, type <code>-h</code> or <code>--help</code> for a summary of all known commands.</p>
+<blockquote>
+<p>Hint: <code>-c</code> or <code>--command</code> are accepted. But <code>-command</code> can result in errors.</p>
+</blockquote>
+<pre><code>RAY-X Terminal usage: TerminalApp [OPTION].. [FILE]
+
+Options:
+-p --plot	 Plot output footprints and histograms.
+-c --ocsv	 Output stored as .csv file.
+-i --input	 Input RML File Path.
+-d --dummy	 Run an in-house Beamline.
+-h --help	 Output this message.
+-v --version
+</code></pre>
+<h1 id="command-descriptions"><a class="header" href="#command-descriptions">Command descriptions</a></h1>
+<table><thead><tr><th>Command name</th><th>description</th></tr></thead><tbody>
+<tr><td><code>--plot</code></td><td>After a successful trace, the output data from the last Image Plane element gets plotted. The application will only exit once the plot window is closed.</td></tr>
+<tr><td><code>--ocsv</code></td><td>To store the result as a .csv (defaults to .h5). This is not recommended with a massive ray amount.</td></tr>
+<tr><td><code>--input</code></td><td>Path to the RML file to be used as imported beamline.</td></tr>
+<tr><td><code>--version</code></td><td>Prints the application's meta info.</td></tr>
+<tr><td><code>--dummy</code></td><td>Run a dummy beamline with some optical elements, useful for testing.</td></tr>
+<tr><td><code>--help</code></td><td>Prints the help message.</td></tr>
+</tbody></table>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="literature"><a class="header" href="#literature">Literature</a></h1>
+<p><a href="AppUser//docs/src/uploads/400bd2abbe644a636cb38daaf31fe0ce/Extending_and_Accelerating_a_GPU_Ray_Tracing_Algorithm_for_Photon_Simulation_in_Beamlines_ohne.pdf">Extending_and_Accelerating_a_GPU_Ray_Tracing_Algorithm_for_Photon_Simulation_in_Beamlines_ohne.pdf</a></p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="link-dump"><a class="header" href="#link-dump">Link Dump</a></h1>
+<p>Here you can find links to pages that were helpful during development. Please don't delete anything from here that wasn't added by you. These links were added because they were deemed useful enough to be relevant later.</p>
+<p>Quadrics:</p>
+<p>https://www.wikiwand.com/en/Quadric</p>
+<p>CMake linking: </p>
+<p>https://www.reddit.com/r/cpp_questions/comments/8z5u4i/cmake_linking_vulkan_and_static_libraries/</p>
+<p>https://stackoverflow.com/questions/10046114/in-cmake-how-can-i-test-if-the-compiler-is-clang</p>
+<p>CMake project structure:</p>
+<p>https://stackoverflow.com/questions/47162766/how-to-write-cmakelists-txt-for-a-big-project-with-multiple-subdirectories</p>
+<p>https://stackoverflow.com/questions/16398937/cmake-and-finding-other-projects-and-their-dependencies</p>
+<p>https://stackoverflow.com/questions/9160335/os-specific-instructions-in-cmake-how-to/40152725</p>
+<p>C++ Optimization:</p>
+<p>https://people.cs.clemson.edu/~dhouse/courses/405/papers/optimize.pdf</p>
+<p>C++ Features:</p>
+<p>https://stackoverflow.com/questions/582331/is-there-a-way-to-instantiate-objects-from-a-string-holding-their-class-name</p>
+<p>https://stackoverflow.com/questions/14251038/debug-macros-in-c</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+            </nav>
+
+        </div>
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        <script type="text/javascript">
+        window.addEventListener('load', function() {
+            window.setTimeout(window.print, 100);
+        });
+        </script>
+    </body>
+</html>

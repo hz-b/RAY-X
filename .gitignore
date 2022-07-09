@@ -1,0 +1,20 @@
+# Directories
+.vs/
+.vscode/
+bin/
+bin-int/
+build/
+out/
+
+# Files
+*.user
+*.code-workspace
+/CMakeSettings.json
+/Tests/output/*
+/Tests/oldray_files/unittestData
+/Tests/oldray_files/spec1-first_rzp02/data
+/Tests/oldray_files/spec1-first_rzp4mm/data
+/Tests/oldray_files/spec1+first_rzp4mm/data
+/Tests/.ipynb_checkpoints/*
+CMakeCache.txt
+cmake.check_cache

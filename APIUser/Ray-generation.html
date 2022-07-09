@@ -1,0 +1,243 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Ray generation - RAY-X Wiki</title>
+        <!-- Custom HTML head -->
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../index.html">Introduction</a></li><li class="chapter-item expanded "><a href="../Developer/Developer.html"><strong aria-hidden="true">1.</strong> Developer Area</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../Developer/How-to-Build.html"><strong aria-hidden="true">1.1.</strong> How to Build</a></li><li class="chapter-item expanded "><a href="../Developer/Style-Guide-for-Programming-in-Ray.html"><strong aria-hidden="true">1.2.</strong> Style Guide for Programming in RAY</a></li><li class="chapter-item expanded "><a href="../Developer/Testing.html"><strong aria-hidden="true">1.3.</strong> Testing</a></li><li class="chapter-item expanded "><a href="../Developer/How-to-use-our-formatter.html"><strong aria-hidden="true">1.4.</strong> How to use our Formatter</a></li><li class="chapter-item expanded "><a href="../Developer/How-to-use-Doxygen.html"><strong aria-hidden="true">1.5.</strong> How to use Doxygen</a></li><li class="chapter-item expanded "><a href="../Developer/PRNGs-on-the-GPU.html"><strong aria-hidden="true">1.6.</strong> PRNGs on the GPU</a></li><li class="chapter-item expanded "><a href="../Developer/Transformation-between-coordinate-systems.html"><strong aria-hidden="true">1.7.</strong> Transformation between coordinate systems</a></li><li class="chapter-item expanded "><a href="../Developer/Quad(ric)-function.html"><strong aria-hidden="true">1.8.</strong> Quad(ric) Function</a></li><li class="chapter-item expanded "><a href="../Developer/Approximation-of-ray-object-intersection-in-the-case-of-quadric-surfaces.html"><strong aria-hidden="true">1.9.</strong> Approximation of ray object intersection in the case of quadric surfaces</a></li><li class="chapter-item expanded "><a href="../Developer/Efficiency.html"><strong aria-hidden="true">1.10.</strong> Efficiency calculations</a></li><li class="chapter-item expanded "><a href="../Developer/Plane-Mirror.html"><strong aria-hidden="true">1.11.</strong> Plane Mirror</a></li><li class="chapter-item expanded "><a href="../Developer/RZP.html"><strong aria-hidden="true">1.12.</strong> Reflection Zone Plate (RZP)</a></li><li class="chapter-item expanded "><a href="../Developer/VSCode-recommended-Extensions.html"><strong aria-hidden="true">1.13.</strong> VSCode recommended Extensions</a></li><li class="chapter-item expanded "><a href="../Developer/Debugging.html"><strong aria-hidden="true">1.14.</strong> Debugging</a></li></ol></li><li class="chapter-item expanded "><a href="../APIUser/APIUser.html"><strong aria-hidden="true">2.</strong> API User Area</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../APIUser/How-to-use-RayCore.html"><strong aria-hidden="true">2.1.</strong> How to use RayCore</a></li><li class="chapter-item expanded "><a href="../APIUser/RAYX-Profiling.html"><strong aria-hidden="true">2.2.</strong> RAY-X Profiling</a></li><li class="chapter-item expanded "><a href="../APIUser/Object-Coordinate-System.html"><strong aria-hidden="true">2.3.</strong> Object Coordinate System</a></li><li class="chapter-item expanded "><a href="../APIUser/User-vs-Model-Parameter.html"><strong aria-hidden="true">2.4.</strong> User vs Model Parameter</a></li><li class="chapter-item expanded "><a href="../APIUser/Ray-generation.html" class="active"><strong aria-hidden="true">2.5.</strong> Ray generation</a></li><li class="chapter-item expanded "><a href="../APIUser/VulkanTracer.html"><strong aria-hidden="true">2.6.</strong> Vulkan Tracer</a></li></ol></li><li class="chapter-item expanded "><a href="../AppUser/AppUser.html"><strong aria-hidden="true">3.</strong> App User Area</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../AppUser/How-to-use-the-TerminalApp.html"><strong aria-hidden="true">3.1.</strong> How to use TerminalApp</a></li><li class="chapter-item expanded "><a href="../AppUser/Literature.html"><strong aria-hidden="true">3.2.</strong> Literature</a></li></ol></li><li class="chapter-item expanded "><a href="../Link-Dump.html"><strong aria-hidden="true">4.</strong> Link Dump</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">RAY-X Wiki</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="ray-generation"><a class="header" href="#ray-generation">Ray Generation</a></h1>
+<p>Rays are described in tree-dimensional space with an origin and a direction.
+The origin are described with a three dimensional vector. However, the direction can be interpreted as the cosines of two angles $\phi$ and $\psi$. Since the z-axis is the direction of the center ray, the direction of all other rays can be described as the angle between ray direction vector and z-y-plane (horizontal divergence $\phi$) and between vector and z-x-plane (vertical divergence $\psi$).
+See also <a href="https://it-ed-git.basisit.de/RAY/RAY/-/wikis/uploads/bdcf4515e03b2fccf462c5f0d76052c3/Paper_Schaefers_RAY_Springer_2007.pdf">documentation</a> p.18,19.</p>
+<p>$ray = \begin{bmatrix}
+x_s \ y_s \ z_s
+\end{bmatrix} + t 
+\begin{bmatrix}
+l_S \ m_S \ n_S
+\end{bmatrix}
+= \begin{bmatrix}
+x_s \ y_s \ z_s
+\end{bmatrix} + t 
+\begin{bmatrix}
+sin \phi_S \cdot cos \psi_S \ cos \psi_S \ cos \psi_S \cdot cos \phi_S
+\end{bmatrix}$</p>
+<p>When the ray is created in the light source, its origin and direction angles are chosen randomly.</p>
+<h2 id="light-sources-point-source"><a class="header" href="#light-sources-point-source">Light sources: Point source</a></h2>
+<p>The user sets the following parameters:</p>
+<ul>
+<li>number of rays</li>
+<li>source dimensions width(x-dir), height(y-dir) and depth(z-dir) </li>
+<li>horizontal and vertical divergence</li>
+</ul>
+<p>The intensity distribution in the lightsource is understood as the probability distribution of the parameters position and angle.
+The parameters $x$, $y$ and $z$ of position and the angles $\phi$ and $\psi$ are chosen randomly but according to a probability distribution. Uniformly distributed random numbers within the range $[0,1]$ are obtained by FORTRAN's <a href="https://gcc.gnu.org/onlinedocs/gcc-4.8.0/gfortran/RANDOM_005fNUMBER.html">random_number</a> function.
+There are two options for the probability distribution in the light source:
+soft edge (Gaussian) and hard edge (uniformly).
+Afterwards, some predefined offset can be added to each component.</p>
+<h3 id="hard-edge"><a class="header" href="#hard-edge">Hard edge</a></h3>
+<p>The hard edge option is the simpler one since the random numbers are already uniformly distributed. Thus, the ray parameters $x$, $y$, $z$, $\phi$, $\psi$ are chosen uniformly within the given extent (width, height, divergence..) of the point source by calculating a random number $u$, subtracting 0.5 such that the number ranges in $[-0.5,+0.5]$ and multiplying with the given width/height/depth or horizontal/vertical extent of the point source.</p>
+<p>$x_S = (u_x - 0.5) \cdot width$ <br>
+$y_S = (u_y - 0.5) \cdot height$ <br>
+$z_S = (u_z - 0.5) \cdot depth$ <br>
+$\phi_S = (u_\phi - 0.5) \cdot hor. div$ <br>
+$\psi_S = (u_\psi - 0.5) \cdot vert. div$ <br></p>
+<p>Thus, the x-coordinate of the origin, for example, lies within $[-\frac{width}{2}, +\frac{width}{2}]$ and is picked uniformly.</p>
+<h3 id="soft-edge"><a class="header" href="#soft-edge">Soft edge</a></h3>
+<p>(See also <a href="https://it-ed-git.basisit.de/RAY/RAY/-/wikis/uploads/bdcf4515e03b2fccf462c5f0d76052c3/Paper_Schaefers_RAY_Springer_2007.pdf">documentation</a> p.14)</p>
+<p>For the soft edge we have to transform the uniform distribution to a Gaussian distribution with $\mu = 0$ and $\sigma = extent$. The resulting values for a specific ray are not bound by the input parameters as for the hard edge. Instead, the more they deviate from $\mu$ the more rare they are. </p>
+<h4 id="in-fortran-code"><a class="header" href="#in-fortran-code">In FORTRAN code</a></h4>
+<p>The old implementation uses the following apporach:</p>
+<ol>
+<li>create two random numbers $u_1,u_2$ from a uniform distribution in $[0,1]$</li>
+<li>$x =(u_1 - 0.5 ) \cdot \sigma \cdot 9$</li>
+<li>$wx =  \exp(\frac{-x^2}{2})$</li>
+<li>$dif = wx-u_2$</li>
+<li>$wx$ is the value of the densitiy function $f(x)$ of the distribution with $\mu=0$ and $\sigma$. If $wx &lt; u_2$, then repeat from step 1 (keep $x$ with probability $f(x)$)</li>
+<li>else keep $x$</li>
+</ol>
+<p>Here, 9 is used as a factor for $\sigma$, since the Gaussian distribution is defined from $-\infty$ to $+\infty$ but a confidence interval $[-4.5 \sigma, +4.5 \sigma]$ contains already more than 99.99%.</p>
+<p>$w(x_s)$ lies in $[0,1]$. It is $1$ for $x_s = 0$ and becomes smaller the more $x_s$ deviates from $0$ according to the gaussian bell curve.
+Since $w(x_s)$ is the probability that $x_s$ occurs in our gaussian distribution, we want to use $x_s$ for the origin of the ray with a probability of $w(x_s)$. Thus, we get a second random number $u_x'$ from FORTRAN's random_number function and if $u_x' \leq w(x_s)$ holds we use $x_S$ for the ray. Otherwise, $x_S$ is discarded and re-calculated with a new random number $u_x$. Thereby, we use $x_S$ with a probability that corresponds to the Gaussian distribution.</p>
+<p>However, this is not very efficient as a lot of rays are thrown away. The following method uses a different approach which - although some values are discarded as well - is more efficient and creates two values in one iteration instead of one (<a href="https://www.desy.de/%7Esschmitt/blobel/eBuch.pdf">more here</a> Section 5.5.2):</p>
+<h4 id="more-efficiently"><a class="header" href="#more-efficiently">More efficiently:</a></h4>
+<ol>
+<li>create two random numbers $u_1, u_2$ from a uniform distribution in $[0,1]$</li>
+<li>calculate $x_1 = 2u_1-1$ and $x_2 = 2u_2 -1$</li>
+<li>calculate  $r^2 = x_1^2 + x_2^2r^2$</li>
+<li>if $r^2 &gt; 1$ repeat from step 1</li>
+<li>else calculate 
+$z_1 = x_1 \cdot \sqrt{-2\frac{\ln{r^2}}{r^2}} \cdot \sigma$ and 
+$z_2 = x_2 \cdot \sqrt{-2\frac{\ln{r^2}}{r^2}} \cdot \sigma$</li>
+</ol>
+<p>Now $z_1$ and $z_2$ are distributed according to the Gaussian distribution with $\mu = 0$ and $\sigma = extent$ as defined by the user.</p>
+<p>This calculation is faster since we get 2 values instead of 1. 
+(In python the first method took twice as long as this method to create the same amount of values)</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../APIUser/User-vs-Model-Parameter.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                            <a rel="next" href="../APIUser/VulkanTracer.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../APIUser/User-vs-Model-Parameter.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                    <a rel="next" href="../APIUser/VulkanTracer.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        <script src="../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../searcher.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+    </body>
+</html>
