@@ -7,7 +7,6 @@ namespace RAYX {
 namespace CPP_TRACER {
 double r8_exp(double);
 double r8_log(double);
-double squaresDoubleRNG(uint64_t&);
 Ray refrac2D(Ray, glm::dvec4, double, double);
 Ray refrac(Ray, glm::dvec4, double);
 glm::dvec4 normal_cartesian(glm::dvec4, double, double);
@@ -33,19 +32,10 @@ double vlsGrating(double, double, double[6]);
 using namespace RAYX;
 
 TEST_F(TestSuite, testUniformRandom) {
-    uint64_t ctr = 13;
-    double old = 0;
+	Beamline b = loadBeamline("test"); // this beamline has just one ray -> one thread.
+	b.m_testSettings = 1;
 
-    for (int i = 0; i < 100; i++) {
-        double d = CPP_TRACER::squaresDoubleRNG(ctr);
-        if (d == old) {
-            RAYX_WARN << "repeating number in testUniformRandom! " << d;
-        }
-        if (d < 0.0 || d > 1.0) {
-            RAYX_ERR << "random number out of range [0, 1]: " << d;
-        }
-        old = d;
-    }
+	tracer->trace(b);
 }
 
 TEST_F(TestSuite, SinTest) {

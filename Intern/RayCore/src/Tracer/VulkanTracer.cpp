@@ -50,7 +50,8 @@
  * buffers[3] = xyznull buffer
  * buffers[4] = material index table
  * buffers[5] = material table
- * buffers[6] = debug buffer
+ * buffers[6] = test buffer
+ * buffers[7] = debug buffer
  *
  * Staging:
  * buffers[0] = In/Output Staigng buffer
@@ -60,7 +61,7 @@
 const char* COMPUTE_BUFFER_NAMES[7] = {"ray buffer",           "output buffer",
                                        "quadric buffer",       "xyznull buffer",
                                        "material index table", "material table",
-                                       "debug buffer"};
+                                       "test buffer", "debug buffer"};
 const char* STAGING_BUFFER_NAMES[2] = {"In/Out staging buffer",
                                        "Debug staging buffer"};
 
@@ -102,6 +103,7 @@ RayList VulkanTracer::trace(const Beamline& beamline) {
     }
 
     m_MaterialTables = beamline.calcMinimalMaterialTables();
+	m_testBufferData = {0, 0};
 
     run();
 
@@ -111,6 +113,34 @@ RayList VulkanTracer::trace(const Beamline& beamline) {
     cleanTracer();
 
     return out;
+}
+
+bool VulkanTracer::runTest(int testSettings) {
+	m_RayList.addRay({}); // create one ray so we get one GPU thread.
+	setBeamlineParameters(1, 0, 1);
+
+	Beamline empty;
+	m_MaterialTables = empty.calcMinimalMaterialTables();
+
+	m_testBufferData = {testSettings, 0};
+
+	run();
+
+	{
+	void* data;
+	vkMapMemory(m_Device, m_compute.m_BufferMemories[6], 0,
+				m_compute.m_BufferSizes[6], 0, &data);
+	// fetch data back
+	memcpy(m_testBufferData.data(), data,
+		   m_compute.m_BufferSizes[6]);
+	vkUnmapMemory(m_Device, m_compute.m_BufferMemories[6]);
+	}
+
+	bool success = m_testBufferData[1] > 0.0; // m_testBufferData[1] contains the bool success.
+
+	cleanTracer();
+
+	return success;
 }
 
 //	This function creates a debug messenger
@@ -173,8 +203,9 @@ void VulkanTracer::run() {
         m_MaterialTables.indexTable.size() * sizeof(int);
     m_compute.m_BufferSizes[5] =
         m_MaterialTables.materialTable.size() * sizeof(double);
+	m_compute.m_BuffersSizes[6] = 2 * sizeof(double); // testBuffer[0] = testSettings, testBuffer[1] = success bit.
     if (isDebug())
-        m_compute.m_BufferSizes[6] = (uint64_t)m_numberOfRays * sizeof(m_debug);
+        m_compute.m_BufferSizes[7] = (uint64_t)m_numberOfRays * sizeof(m_debug);
 
     for (uint32_t i = 0; i < m_compute.m_BufferSizes.size(); i++) {
         RAYX_LOG << "Compute Buffer \"" << COMPUTE_BUFFER_NAMES[i]
@@ -254,6 +285,7 @@ void VulkanTracer::prepareBuffers() {
              << " ms";
     fillQuadricBuffer();
     fillMaterialBuffer();
+	fillTestBuffer();
     RAYX_LOG << "All buffers filled.";
 
     createDescriptorSet();
@@ -678,13 +710,19 @@ void VulkanTracer::createBuffers() {
                      VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT,
                  m_compute.m_Buffers[5], m_compute.m_BufferMemories[5]);
 
+	// Test buffer
+    createBuffer(m_compute.m_BufferSizes[6], VK_BUFFER_USAGE_STORAGE_BUFFER_BIT,
+                 VK_MEMORY_PROPERTY_HOST_COHERENT_BIT |
+                     VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT,
+                 m_compute.m_Buffers[6], m_compute.m_BufferMemories[6]);
+
     // Buffer for debug
     if (isDebug())
-        createBuffer(m_compute.m_BufferSizes[6],
+        createBuffer(m_compute.m_BufferSizes[7],
                      VK_BUFFER_USAGE_TRANSFER_SRC_BIT |
                          VK_BUFFER_USAGE_STORAGE_BUFFER_BIT,
                      VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
-                     m_compute.m_Buffers[6], m_compute.m_BufferMemories[6]);
+                     m_compute.m_Buffers[7], m_compute.m_BufferMemories[7]);
 
     // ----STAGING
     // staging buffer for rays
@@ -1072,6 +1110,19 @@ void VulkanTracer::fillMaterialBuffer() {
     RAYX_LOG << "Done!";
 }
 
+void VulkanTracer::fillTestBuffer() {
+    RAYX_LOG << "Filling TestBuffer..";
+
+	// data is copied to the buffer
+	void* data;
+	vkMapMemory(m_Device, m_compute.m_BufferMemories[6], 0,
+				m_compute.m_BufferSizes[6], 0, &data);
+	memcpy(data, m_testBufferData.data(),
+		   m_compute.m_BufferSizes[6]);
+	vkUnmapMemory(m_Device, m_compute.m_BufferMemories[6]);
+    RAYX_LOG << "Done!";
+}
+
 // Create Layout for descriptors that should contain data to/from shader
 void VulkanTracer::createDescriptorSetLayout() {
     RAYX_PROFILE_FUNCTION();
@@ -1100,8 +1151,10 @@ void VulkanTracer::createDescriptorSetLayout() {
          NULL},
         {5, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 1, VK_SHADER_STAGE_COMPUTE_BIT,
          NULL},
-#ifdef RAYX_DEBUG_MODE
         {6, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 1, VK_SHADER_STAGE_COMPUTE_BIT,
+         NULL},
+#ifdef RAYX_DEBUG_MODE
+        {7, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 1, VK_SHADER_STAGE_COMPUTE_BIT,
          NULL}
 #endif
     };
@@ -1548,11 +1601,11 @@ void VulkanTracer::setSettings() {
 #ifdef RAYX_DEBUG_MODE
     RAYX_D_LOG << "VulkanTracer Debug: ON";
     m_settings.m_isDebug = true;
-    m_settings.m_computeBuffersCount = 7;
+    m_settings.m_computeBuffersCount = 8;
     m_settings.m_stagingBuffersCount = 2;
 #else
     m_settings.m_isDebug = false;
-    m_settings.m_computeBuffersCount = 6;
+    m_settings.m_computeBuffersCount = 7;
     m_settings.m_stagingBuffersCount = 1;
 #endif
     m_settings.m_buffersCount =

@@ -125,8 +125,13 @@ struct Element {
 					   // use the matIdx-table to determine the relevant indices for when which table starts and stops.
 	};
 
+	layout(binding = 6) buffer testBuf {
+		double testSettings;
+		double testSuccess;
+	};
+
 	#ifdef DEBUG
-		layout(binding = 6) buffer debugBuf {
+		layout(binding = 7) buffer debugBuf {
 			_debug_struct d_struct[];  // contains nff table of all materials concatenated together
 		};
 	#endif
@@ -140,6 +145,7 @@ struct Element {
 #include "utils.comp"
 #include "intersection.comp"
 #include "trace.comp"
+#include "test.comp"
 // clang-format on
 
 // @brief: Dynamic ray tracing: check which ray hits which element first
@@ -267,8 +273,9 @@ void dynamicElements() {
 }
 
 void main() {
-	dynamicElements();
-
-    // output = input:
-    // outputData[uint(gl_GlobalInvocationID)] = rayData[uint(gl_GlobalInvocationID)];
+	if (testSettings == 0) {
+		dynamicElements();
+	} else {
+		runTest();
+	}
 }

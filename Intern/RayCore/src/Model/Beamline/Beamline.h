@@ -37,7 +37,7 @@ class RAYX_API Beamline {
      * addition to those from the light sources. relevant for testing!
      *
      */
-    std::vector<Ray> m_extraRays;
+    std::vector<Ray> m_extraRays; // TODO(rudi): remove when possible. This is deprecated.
 };
 
 }  // namespace RAYX

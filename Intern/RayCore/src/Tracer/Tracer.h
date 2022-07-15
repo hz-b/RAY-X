@@ -23,6 +23,11 @@ class RAYX_API Tracer {
      *
      */
     virtual RayList trace(const Beamline&) = 0;
+
+    /**
+     * @brief Run the shader test `testSettings`, and return whether it succeeded.
+     */
+    virtual bool runTest(int testSettings) = 0;
 };
 
 }  // namespace RAYX

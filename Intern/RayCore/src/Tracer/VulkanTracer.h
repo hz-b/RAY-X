@@ -61,6 +61,7 @@ class RAYX_API VulkanTracer : public Tracer {
     ~VulkanTracer();
 
     RayList trace(const Beamline&) override;
+    bool runTest(int testSettings) override;
 
   private:
     void run();
@@ -170,6 +171,11 @@ class RAYX_API VulkanTracer : public Tracer {
     // Material tables
     MaterialTables m_MaterialTables;
 
+	// this currently contains two doubles:
+	// - testSettings
+	// - return value success, per default it's 0 meaning failure.
+	std::vector<double> m_testBufferData;
+
     struct Settings {
         bool m_isDebug;
         uint32_t m_buffersCount;
@@ -223,6 +229,7 @@ class RAYX_API VulkanTracer : public Tracer {
     void divideAndSortRays();
     void fillQuadricBuffer();
     void fillMaterialBuffer();
+    void fillTestBuffer();
     void copyToRayBuffer(uint32_t offset, uint32_t numberOfBytesToCopy);
     void copyToOutputBuffer(uint32_t offset, uint32_t numberOfBytesToCopy);
     void copyFromDebugBuffer(uint32_t offset, uint32_t numberOfBytesToCopy);

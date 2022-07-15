@@ -1,0 +1,33 @@
+void runTest() {
+	// if the test crashes and hence touches nothing, success is false.
+	testSuccess = 0.0;
+
+	if (testSettings == 1) {
+		test_UniformRandom();
+	}
+}
+
+void test_UniformRandom() {
+    uint64_t ctr = 13;
+    double old = 0;
+
+    for (int i = 0; i < 100; i++) {
+        double d = squaresDoubleRNG(ctr);
+        if (d == old) {
+			#ifdef CPP
+            RAYX_WARN << "repeating number in testUniformRandom! " << d;
+			#endif
+			return;
+        }
+        if (d < 0.0 || d > 1.0) {
+			#ifdef CPP
+            RAYX_ERR << "random number out of range [0, 1]: " << d;
+			#endif
+			return;
+        }
+        old = d;
+    }
+
+	// if nothing failed yet, we succeeded.
+	testSuccess = 1.0;
+}
